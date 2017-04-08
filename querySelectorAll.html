@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+    <img id="outside">
+    <div id="my-id">
+        <img id="inside">
+        <div class="lonely"></div>
+        <div class="outer">
+            <div class="inner"></div>
+        </div>
+    </div>
+    <script>
+        var outside = document.querySelector('#outside');
+        var div = document.querySelectorAll('div');
+
+        var inside = document.querySelector('#my-id').querySelectorAll('img');
+
+        var div1 = document.querySelectorAll('#my-id div div');   //inner
+        var div2 = document.querySelector('#my-id').querySelectorAll('div div');  //div.lonely, div.outer, div.inner
+        console.log(div1,div2)
+
+    </script>
+</body>
+</html>

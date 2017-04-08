@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no"/>
+
+</head>
+<style>
+    *{
+        box-sizing:border-box;
+        margin:0;
+        padding:0;
+    }
+    html, body{
+        height:100%;
+        width:100%;
+        overflow:hidden;
+        position:relative;
+    }
+    #canvas{
+        position:absolute;
+        top:0;
+        left:0;
+    }
+    #canvas1{
+        position:absolute;
+        top:50px;
+        left:120px;
+    }
+
+
+</style>
+<body>
+
+<canvas id='canvas' width="500" height="500"></canvas>
+<canvas id='canvas1' width="200" height="200"></canvas>
+
+<script>
+    var canvas = document.querySelector('#canvas'),
+            context = canvas.getContext('2d');
+    var canvas1 = document.querySelector('#canvas1'),
+            context1 = canvas1.getContext('2d');
+    var img = document.createElement('img');
+    img.src = 'https://www.vv726.top/demo/img/dog1.jpg';
+    //img.crossOrigin = "Anonymous";
+    //设置模糊的区域
+    var rangeX = 120;
+    var rangeY = 50;
+    /*function render() {
+     // 获取绘制的区域的像素
+     var imageData = context.getImageData(rangeX, rangeY, 200, 200);
+     var numTileRows = 20;
+     var numTileCols = 20;
+     var tileWidth = imageData.width/numTileCols;
+     var tileHeight = imageData.height/numTileRows;
+     for( var r = 0; r < numTileRows; r++ ) {
+     for( var c = 0; c < numTileCols; c++ ) {
+     var x = (c*tileWidth) + (tileWidth/2);
+     var y = (r*tileHeight) + (tileHeight/2);
+     var pos = Math.floor(y)*(imageData.width*4) + (Math.floor(x)*4)
+     var red = imageData.data[pos];
+     var green = imageData.data[pos + 1];
+     var blue = imageData.data[pos + 2];
+     context1.fillStyle = `rgb(${red},${green},${blue})`;
+     //绘制
+     context1.fillRect(x - tileWidth/2, y - (tileHeight/2), tileWidth, tileHeight)
+     }
+     }
+     }*/
+    img.onload = function(e) {
+        context.drawImage(img, 0, 0, canvas.width, canvas.height);
+        //绘制之前先平移到需要绘制的区域
+        context.translate(rangeX, rangeY);
+        //render();
+        context1.fillStyle = 'rgb(204,204,204)';
+        //绘制
+        context1.fillRect(0, 0, canvas1.width, canvas.height);
+    };
+    var canvas1Offset = canvas1.getBoundingClientRect();
+    var left = canvas1Offset.left;
+    var Top = canvas1Offset.top;
+    canvas1.addEventListener('touchmove', function(e) {
+        e.stopPropagation();
+        e.preventDefault();
+        // console.log(e)
+        var mouseX = e.touches[0].clientX - left;
+        var mouseY = e.touches[0].clientY - Top;
+        //console.log(mouseX, mouseY)
+        context1.clearRect(mouseX, mouseY, 20, 20)
+    })
+
+
+</script>
+
+</body>
+</html>

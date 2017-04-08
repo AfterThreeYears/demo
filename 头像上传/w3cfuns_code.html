@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<link href="http://s0.jmstatic.com/templates/jumei/css/v3.3/jumei_usercenter.min.css?V14.css" rel="stylesheet" type="text/css">
+	<style>
+		.view span {    background-position: center center;    background-size: cover;    display: inline-block;    margin-right: 10px;    vertical-align: bottom;    display: inline-block;    *zoom: 1;}
+		.view img {    display: block;}
+		.file img {    visibility: hidden;}
+	</style>
+	<script src="http://code.jquery.com/jquery.min.js"></script>
+	<script src="./jquery.imagesupload.min.js"></script>
+</head>
+<body>
+	<div class="profile"> 
+   <div class="content avatar">
+       <p class="view">            
+         <span>
+            <img width="220" height="220" alt="大头像" >
+         </span>           
+         <span>
+            <img width="64" height="64" alt="小头像" >
+         </span>        
+       </p>        
+                    
+         <label class="btn_mid_pink fileup_ui">                             
+            <input type="file" accept="image/*" name="avatar" class="file">               
+         </label>                 
+                       
+       
+	 </div>
+  </div>
+<script>
+    var file;
+    $("[type=file]").imagesUpload({
+    	error: function(info) {
+    		alert(info.name + "不是图片文件，请选择一个图片文件");
+    	},
+    	callback: function(info, path) {
+    		if (path) {
+    			$(".view span").css("background-image", "url(" + path + ")").addClass("file");
+    		} else {
+    			$(".path").text(info.name);
+    		}
+    	}
+    }); 
+</script>
+</body>
+</html>
+
+
+
+
+
+              

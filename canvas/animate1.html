@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no"/>
+
+</head>
+<style>
+    *{
+        box-sizing:border-box;
+        margin:0;
+        padding:0;
+    }
+    html, body{
+        height:100%;
+        width:100%;
+    }
+    #canvas{
+
+    }
+
+
+</style>
+<body>
+
+<canvas id='canvas' width="500" height="280"></canvas>
+<button id="start">start</button>
+<button id="stop">stop</button>
+<script src="../../jquery.js"></script>
+<script>
+
+
+    var canvas = document.querySelector('#canvas'),
+            context = canvas.getContext('2d');
+    var x = 0;
+    var y = 0;
+    var randomX = 10;
+    var randomY = 10;
+    var snackW = 10;
+    var snackH = 10;
+
+    var t = 10; //舍身长
+    var map = []; //记录蛇运行路径
+    var size = 10; //蛇身单元大小
+    var direction = 2; // 1 向上 2 向右 0 左 3下
+
+    var status;
+    function animate() {
+
+        switch(direction){
+            case 1:y = y-size;break;
+            case 2:x = x+size;break;
+            case 0:x = x-size;break;
+            case 3:y = y+size;break;
+        }
+
+        if (map.length>t) { //保持舍身长度
+            var cl = map.shift(); //删除数组第一项，并且返回原元素
+            context.clearRect(cl['x'], cl['y'], size, size);
+        };
+        map.push({'x':x,'y':y}); //将数据添加到原数组尾部
+        context.fillRect(x, y, size, size);//绘制矩形
+
+//
+//        context.fillRect(x, y, snackW, snackH);
+        random();
+        if( Math.abs(x - randomX) < 10 && Math.abs(y - randomY) < 10 ) {
+            random(1);
+        }
+
+    }
+
+    document.onkeydown = function(e) { //改变蛇方向
+        var code = e.keyCode - 37;
+        switch(code){
+            case 1 : direction = 1;break;//上
+            case 2 : direction = 2;break;//右
+            case 3 : direction = 3;break;//下
+            case 0 : direction = 0;break;//左
+        }
+    }
+
+    var timer;
+    function start() {
+        clearInterval(timer);
+        timer = setInterval(function() {
+            animate();
+        }, 100)
+    }
+    start();
+    function random(status) {
+        if( status ) {
+
+            randomX = Math.floor(Math.random()*canvas.width/10) * 10;
+            randomY = Math.floor(Math.random()*canvas.height/10) * 10
+        }
+        context.fillRect(randomX, randomY, 10, 10);
+    }
+    //上右下左 38 39 40 41
+</script>
+
+</body>
+</html>

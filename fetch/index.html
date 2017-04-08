@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+<body>
+<script>
+    fetch('index.json').then(function(res){
+        console.log(res)
+        if( res.ok ){
+            res.json().then(function(data){
+                console.log(data.name);
+            });
+        }else{
+            console.log('no suppose Fetch API');
+        }
+    },function(err){
+        console.log('Fetch failed',err);
+    })
+</script>
+</body>
+</html>

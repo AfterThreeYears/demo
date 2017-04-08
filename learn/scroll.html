@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no"/>
+    <title>Document</title>
+    <style>
+        *{
+            padding:0;
+            margin:0;
+            box-sizing:border-box;
+        }
+        body{
+
+        }
+        #mask{
+            position:fixed;
+            top:0;
+            left:0;
+            right:0;
+            bottom:0;
+            background:rgba(0, 0, 0, 0.5);
+            display:none;
+        }
+        .overflow{
+            overflow:hidden;
+
+        }
+        #box{
+            background:#ffffff;
+            overflow:auto;
+            width:50%;
+            height:50%;
+            position:absolute;
+            left:30%;
+            top:30%;
+        }
+        .fixed{
+            position: fixed;
+        }
+
+    </style>
+</head>
+<body>
+<div id="mask">
+    <div id="box">
+        <button id="remove">remove</button>
+    </div>
+</div>
+<script src="https://www.vv726.top/demo/JSWallper/js/zepto.js"></script>
+<script>
+
+
+    var fragment = document.createDocumentFragment();
+    for( var i = 0; i < 300; i++ ) {
+        var p = document.createElement('p');
+        p.innerHTML = 'p' + i;
+        $(fragment).append(p)
+    }
+    $('body').append($(fragment));
+    $('body').append($('<button id="clock">button</button>'));
+
+
+    for( var i = 0; i < 300; i++ ) {
+        var p = document.createElement('p');
+        p.innerHTML = 'p' + i;
+        $('#box').append(p)
+    }
+
+
+
+
+
+    function stop(e) {
+
+        if(!$(e.target).parent('#box').length   ){
+            e.preventDefault();
+        }
+
+
+    }
+    $('#clock')[0].addEventListener('click', function() {
+
+        $('body').css('top',-$('body').scrollTop()+'px').addClass('fixed')
+
+        //document.body.addEventListener('touchmove', stop, false);
+        $('#mask').show()
+    }, false)
+
+
+
+
+    $('#remove').on('click',function(){
+
+        var t = $('body').css('top');
+        console.log(t)
+        $('#mask').hide()
+
+        $('body').removeClass('fixed')
+        console.log(t)
+
+        $('body').scrollTop(Math.abs(parseInt(t)))
+        //document.body.removeEventListener('touchmove', stop, false)
+    })
+
+    //    $('#box').scroll(function(e){
+    //        if( !e.target.scrollTop ){
+    //
+    //        }
+    //    })
+
+
+
+
+
+</script>
+</body>
+</html>

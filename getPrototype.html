@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title></title>
+</head>
+<body>
+<script>
+    // Create a constructor function.
+    function Pasta(grain, width) {
+        this.grain = grain;
+        this.width = width;
+    }
+    // Create an object from the pasta constructor.
+    var spaghetti = new Pasta("wheat", 0.2);
+
+    // Obtain the prototype from the object.
+    var proto = Object.getPrototypeOf(spaghetti);
+    console.log(proto);
+    // Add a property to the prototype and validate that
+    // the original object has the property.
+    proto.foodgroup = "carbohydrates";
+    document.write(spaghetti.foodgroup + " ");
+
+    // Verify that the prototype obtained from the object
+    // is the same as the prototype of the constructor.
+    var result = (proto === Pasta.prototype);
+    document.write(result + " ");
+
+    // Verify that prototype obtained from the object
+    // is a prototype of the original object.
+    var result = proto.isPrototypeOf(spaghetti);
+    document.write(result);
+
+    // Output: carbohydrates true true
+</script>
+</body>
+</html>

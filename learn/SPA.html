@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+<ul>
+    <li><a href="/name/js">js</a></li>
+    <li><a href="/name/node">node</a></li>
+</ul>
+<div id="result"></div>
+</body>
+</html>
+<script id="tempList" type="text/template">
+    <ul>
+        <li>$name$</li>
+        <li>$desc$</li>
+    </ul>
+</script>
+<script src="https://cdn.staticfile.org/jquery/3.1.1/jquery.js"></script>
+<script>
+    ;
+    (function() {
+        var win = window,
+                evt = 'popstate';
+        var _this = {};
+
+        function Router(opts) {
+            var search = location.search;
+            this.opts = opts;
+            this.routes = opts.routes;
+            this.go(  search.substr(1,search.length) , true);
+            this.bindEvent(opts.links || []);
+            _this = this;
+            //console.log(_this)
+        }
+
+        Router.prototype.start = function() {
+            win.addEventListener(evt, this.emit, false)
+        };
+        Router.prototype.stop = function() {
+            //$(win).on(evt, this.emit);
+            win.removeEventListener(evt, this.emit, false)
+        };
+        Router.prototype.exec = function(path) {
+            for( var r in this.routes ) {
+                var route = /\/\w+\/\w+$/gi;
+                //如果路由不是按照规则来的
+                if( !route.test(path) ) {
+                    continue;
+                }
+                try {
+                    //console.log(typeof this.routes[r])
+                    this.routes[r](path.replace(/\/\w+\//, ''));
+                } catch(e) {
+                    console.warn('请输入函数');
+                }
+            }
+        };
+        Router.prototype.emit = function(path) {
+            path = path.state.path;
+            //console.log(path)
+            _this.exec(path);
+        };
+        Router.prototype.go = function(path, isReplace) {
+            //console.log(path);
+            var url = location.origin + location.pathname;
+            url += path ?  '?' + path  : '';
+            if( isReplace ) {
+                history.replaceState({path:path}, document.title, url);
+            } else {
+                history.pushState({path:path}, document.title, url);
+            }
+            this.exec(path);
+        };
+        Router.prototype.hold = function(e) {
+            var path = e.target.pathname;
+            this.go(path);
+            //阻止默认状态
+            e.preventDefault();
+        };
+        Router.prototype.bindEvent = function(links) {
+
+            //绑定事件
+            for( var i = 0; i < links.length; i++ ) {
+                links[i].onclick = function(e) {
+                    _this.hold(e);
+                }
+            }
+        };
+        if( typeof exports === 'object' ) {
+            module.exports = Router;
+        } else if( typeof define === 'function' && define.amd ) {
+            define(function() {
+                return window.learnRoute = Router;
+            })
+        } else {
+            window.learnRoute = Router;
+        }
+    })(window, undefined);
+
+
+</script>
+<script>
+
+    String.prototype.temp = function(obj) {
+        //变量替换
+        return this.replace(/\$\w+\$/gi, function(matchs) {
+            var returns = obj[matchs.replace(/\$/g, "")];
+            return (returns + "") == "undefined" ? "" : returns;
+        });
+    };
+    ;
+    (function() {
+        var arr = {
+            js:[
+                {"name":"zepto", "desc":"用于现代浏览器的兼容 jQuery 的库"},
+                {"name":"webpack", "desc":"webpack 是一个 JavaScript 模块打包工具，功能强悍、插件丰富"}
+            ],
+            node:[
+                {"name":"PM2", "desc":"Node 进程管理，内置负载均衡，提供自动重启，热启动等功能，适合在生产环境下使用"},
+                {"name":"express-admin", "desc":"Express 的后端，支持(MySQL, MariaDB, SQLite, PostgreSQL)"}
+            ]
+        };
+        var result = $('#result'), tempList = $("#tempList").html();
+        var router = new learnRoute({
+            links:$('a[href]'),
+            routes:{
+                '/name/:name':function(name) {
+                    document.title = name;
+                    var html = '', obj = arr[name];
+                    $.each(obj, function(i, obj) {
+                        html += tempList.temp(obj);
+                    });
+                    result.html('');
+                    result.append(html)
+                },
+            },
+        });
+        router.start();
+    })();
+</script>
+

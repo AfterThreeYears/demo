@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+<style>
+    *{
+        box-sizing:border-box;
+        margin:0;
+        padding:0;
+    }
+    body{
+        background:#cccccc;
+    }
+    canvas{
+        margin:10px;
+        background:#dddddd;
+    }
+</style>
+<body>
+
+<canvas id='canvas' height="500" width="500"></canvas>
+
+<script>
+
+    var canvas = document.querySelector('#canvas'),
+            context = canvas.getContext('2d');
+    var ARROW_MARGIN = 30,
+            POINT_RADIUS = 7;
+    var point = [
+        {
+            x:canvas.width - ARROW_MARGIN,
+            y:canvas.height - ARROW_MARGIN
+        },
+        {
+            x:canvas.width - ARROW_MARGIN*2,
+            y:canvas.height - ARROW_MARGIN
+        },
+        {
+            x:POINT_RADIUS,
+            y:canvas.height/2
+        },
+        {
+            x:POINT_RADIUS,
+            y:canvas.height/2 - ARROW_MARGIN
+        },
+        {
+            x:canvas.width - ARROW_MARGIN,
+            y:ARROW_MARGIN
+        },
+        {
+            x:canvas.width - ARROW_MARGIN,
+            y:ARROW_MARGIN*2
+        }
+    ]
+    function drawPoint(x, y, strokeStyle, fillStyle) {
+        context.beginPath();
+        context.fillStyle = fillStyle;
+        context.strokeStyle = strokeStyle;
+        context.arc(x, y, POINT_RADIUS, 0, Math.PI*2, false);
+        context.fill();
+    }
+    function drawBezierPoints() {
+        var i, fillStyle, strokeStyle;
+        for( i = 0; i < point.length; ++i ) {
+            fillStyle = i%2 === 0 ? 'red' : 'blue';
+            strokeStyle = i%2 === 0 ? 'red' : 'yellow';
+            drawPoint(point[i].x, point[i].y, strokeStyle.fillStyle);
+        }
+    }
+    function drawArrow() {
+        context.strokeStyle = '#000';
+        context.fillStyle = '#abcdef';
+        context.moveTo(canvas.width, ARROW_MARGIN, ARROW_MARGIN*2);
+        context.lineTo(canvas.width - ARROW_MARGIN,
+                canvas.height - ARROW_MARGIN*2);
+        context.quadraticCurveTo(point[0].x, point[0].y,
+                point[1].x, point[1].y);
+        context.lineTo(ARROW_MARGIN, canvas.height/2 + ARROW_MARGIN);
+        context.quadraticCurveTo(point[2].x, point[2].y,
+                point[3].x, point[3].y);
+        context.lineTo(canvas.width - ARROW_MARGIN*2, ARROW_MARGIN);
+        context.lineTo(canvas.width - ARROW_MARGIN*2, ARROW_MARGIN);
+        context.quadraticCurveTo(point[4].x, point[4].y,
+                point[5].x, point[5].y);
+        context.fill();
+        context.stroke();
+    }
+
+    context.clearRect(0,0,canvas.width,canvas.height);
+
+    drawArrow();
+    drawBezierPoints()
+
+</script>
+</body>
+</html>

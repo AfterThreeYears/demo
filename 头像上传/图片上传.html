@@ -1,0 +1,36 @@
+<head>  
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />  
+<title></title>  
+
+<script src="https://cdn.staticfile.org/jquery/2.1.4/jquery.min.js"></script>
+<script type="text/javascript" src="upload.js"></script>  
+</head>  
+<body>  
+<div class="main" style="margin:0 auto;width:230px;height:350px;border:1px solid;padding:5px;" >    
+</div>  
+<img src="" id='suc' alt="">
+</body>  
+</html>  
+<script type="text/javascript">  
+    $('div.main').previewUpload({  
+        //预览框的样色设置  
+        'preview':{  
+            'margin':'0 auto',  
+            'border':'1px dashed',  
+            'width':220,//必须int   
+            'height':250,//必须int  
+  
+        },  
+        //弹出框选择文件的类型  
+        'url':'//localhost:8000/upload1',  
+        'imgSize':20000 ,
+         'data':{name:1},
+         sucCallback:function(data){
+            console.log(data,'suc')
+            $('#suc')[0].src = data.url;
+         },
+         errCallback:function(err){
+            console.log(err,'err')
+         }
+    });  
+</script>  

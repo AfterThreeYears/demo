@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no"/>
+    <title>Document</title>
+</head>
+<body>
+
+<canvas id="canvas" height="300" width="600"></canvas>
+<canvas id="canvas1" height="300" width="600"></canvas>
+<input type="radio" id="repeatRadio" name="patternRadio"  />
+<label for="repeatRadio">repeat</label>
+<input type="radio" id="repeatXRadio" name="patternRadio" />
+<label for="repeatXRadio">repeatXRadio</label>
+<input type="radio" id="repeatYRadio" name="patternRadio" />
+<label for="repeatYRadio">repeatYRadio</label>
+<input type="radio" id="noRepeatRadio" name="patternRadio" checked/>
+<label for="noRepeatRadio">noRepeatRadio</label>
+<script>
+    var canvas = document.querySelector('#canvas'),
+       context =  canvas.getContext('2d'),
+            gradient = context.createLinearGradient(0,0,canvas.width,0);
+
+    gradient.addColorStop(0,'blue');
+    gradient.addColorStop(0.25,'white');
+    gradient.addColorStop(0.5,'purple');
+    gradient.addColorStop(0.75,'red');
+    gradient.addColorStop(1,'yellow');
+
+
+
+
+    context.lineJoin = 'round';
+    context.lineWidth = 10;
+    context.strokeStyle = 'red';
+    context.fillStyle = 'blue';
+
+    context.font = '24px Helvetica';
+    context.fillText('click',30,175);
+
+    context.strokeRect(30,30,100,100);
+    context.fillRect(150,30,100,100);
+
+    context.fillStyle = gradient;
+    context.rect(0,0,canvas.width,canvas.height);
+    context.fill();
+
+    context.canvas.onmousedown = function(e){
+        context.clearRect(0,0,canvas.width,canvas.height);
+    }
+
+
+</script>
+<script>
+    var canvas1 = document.querySelector('#canvas1'),
+            context1 =  canvas1.getContext('2d'),
+            repeatRadio = document.querySelector('#repeatRadio'),
+            repeatXRadio = document.querySelector('#repeatXRadio'),
+            repeatYRadio = document.querySelector('#repeatYRadio'),
+            noRepeatRadio = document.querySelector('#noRepeatRadio'),
+            img = new Image();
+
+    function fillCanvasWithPattern(repeatString){
+        var pattern = context1.createPattern(img,repeatString);
+        context1.clearRect(0,0,canvas1.width,canvas1.height);
+        context1.fillStyle = pattern;
+        context1.shadowColor = 'rgba(0,0,0,0.7)';
+        context1.shadowOffsetX = 1;
+        context1.shadowOffsetY = 1;
+        context1.shadowBlur = 2;
+        context1.fillRect(0,0,canvas1.width,canvas1.height);
+    }
+
+    repeatRadio.onclick = function(e){
+        fillCanvasWithPattern('repeat');
+    }
+    repeatXRadio.onclick = function(e){
+        fillCanvasWithPattern('repeat-x');
+    }
+    repeatYRadio.onclick = function(e){
+        fillCanvasWithPattern('repeat-y');
+    }
+    noRepeatRadio.onclick = function(e){
+        fillCanvasWithPattern('no-repeat');
+    }
+
+
+    img.src = 'https://cdn.v2ex.com/friends/wilddog/wilddog_20160511_small.jpg';
+    img.onload = function(){
+        fillCanvasWithPattern('no-repeat');
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</script>
+</body>
+</html>

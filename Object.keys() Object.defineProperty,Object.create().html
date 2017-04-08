@@ -1,0 +1,116 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+<body>
+	<script type="text/javascript">
+		
+		 	 ;(function(){
+                 "use strict";
+                 try {
+                     var o = {};
+                     Object.defineProperty(o, "attr", {
+                         value: "这是利用defindProperty添加的新属性",
+                         writable: false,
+                         enumerable: true,
+                         configurable: true
+                     });
+
+                     (function() {
+                         var name = "司徒正美";
+                         //读写器
+                         Object.defineProperty(o, "name", {
+                             get: function() {
+                                 return name;
+                             },
+                             set: function(value) {
+                                 name = value + "!";
+                             },
+                             //enumerable: true,
+                         });
+                     })();
+
+                     alert(o.attr)
+                     // 这是利用defindProperty添加的新属性
+
+                     alert(o.name); // 司徒正美
+
+                     o.name = "ruby louvre";
+                     alert(o.name); // ruby louvre!
+
+                     alert(Object.keys(o)); //attr  这里是遍历对象所有的属性 但是因为定义name属性的时候没有给它设置enumerable: true, 所以默认是不可遍历的，所以只有attr
+                      try {
+                         o.attr = "试图重写该属性";
+                     } catch (ee) {
+                         alert("与writable: false冲突");
+                     }
+                     Object.defineProperty(o, "attr", {
+                         writable: true,
+                         configurable: false
+                     });
+
+                     o.attr = "再试尝试重写该属性";
+                     alert(o.attr);
+
+                     try {
+                         console.log(delete o.attr);
+                     } catch ( ee ){
+                         alert('删除失败,false 与configurable: false冲突')
+                     }
+
+
+                 } catch (e) {
+                     alert("你的游览器不支持Object.defineProperty ")
+                 }
+
+             })();
+
+
+
+
+
+
+		 	
+	</script>
+    <script>
+        ;(function(){
+            obj = {
+		 	 	a:'1111',
+		 	 	getA:function(){
+		 	 		return this.a;
+		 	 	}
+		 	 };
+
+		 	Object.keys(obj).forEach(function(i, value) {
+		 		console.log(i + ":" + value + "\n");
+		 	});
+
+
+		 	var Cat = {
+		 		name : "大毛",
+		 		maskSound:function(){
+		 			return '喵喵喵';
+		 		}
+		 	};
+
+		 	var cat1 = Object.create(Cat,{
+                age:{
+                    writable:true,
+                    configurable:true,
+                    value:21
+                }
+            });
+
+		 	console.log(cat1.name);
+		 	console.log(cat1.maskSound());
+            console.log(cat1);
+
+
+
+
+
+        })();
+    </script>
+</body>
+</html>

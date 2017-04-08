@@ -1,0 +1,33 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+
+<meta name="robots" content="noindex">
+  <title>JS Bin</title>
+</head>
+<body>
+  这是新打开的页面
+  <div id="message">暂未收到消息,请返回第一个页面点击push message</div>
+<script>
+window.addEventListener("message", receiveMessage, false);
+function receiveMessage(event ){
+    event.source.postMessage('hi,我来之新打开的页面，我收到你post的消息了',event.origin);
+    try{
+      var es = event.source;
+      console.log(es)
+    }catch(e){
+      console.log(e)
+    }
+
+
+
+    var html='event.data: '+event.data+'<br>';
+    html += 'event.origin: '+event.origin+'<br>';
+    
+    document.getElementById('message').innerHTML= html;
+}
+</script>
+</body>
+</html>

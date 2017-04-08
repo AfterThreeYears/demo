@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no"/>
+    <title>Document</title>
+    <style>
+        *{
+            box-sizing:border-box;
+            padding:0;
+            margin:0;
+            list-style:none;
+        }
+        ul li{
+            display:inline-block;
+        }
+        li{
+            width:50px;
+            height:50px;
+            line-height:50px;
+            text-align:center;
+            border:1px solid red;
+        }
+        li:active{
+            background:#cccccc;
+        }
+    </style>
+</head>
+<body>
+
+<div class="box">
+    <p class="str">0</p>
+    <ul>
+        <li data-desc="C">C</li>
+        <li data-desc="/">/</li>
+        <li data-desc="*">*</li>
+        <li data-desc="prev">退</li>
+    </ul>
+    <ul>
+        <li data-desc="7">7</li>
+        <li data-desc="8">8</li>
+        <li data-desc="9">9</li>
+        <li data-desc="-">-</li>
+    </ul>
+    <ul>
+        <li data-desc="4">4</li>
+        <li data-desc="5">5</li>
+        <li data-desc="6">6</li>
+        <li data-desc="+">+</li>
+    </ul>
+    <ul>
+        <li data-desc="1">1</li>
+        <li data-desc="2">2</li>
+        <li data-desc="3">3</li>
+        <li data-desc="=">=</li>
+    </ul>
+    <ul>
+        <li data-desc="0">0</li>
+        <li data-desc=".">.</li>
+    </ul>
+</div>
+
+
+<script src="../jquery.js"></script>
+<script>
+    var arr = [];
+    var str = '';
+    $('.box').on('click', function(e) {
+        var desc = $(e.target).attr('data-desc');
+        if( desc === '=' ) {
+            //等于
+            getResult();
+        } else if( desc === 'C' ) {
+            init();
+        } else if( typeof desc !== 'undefined' ) {
+            getAction(desc);
+        }
+    })
+    function getResult() {
+
+        try{
+            var result = eval(arr.join(''));
+        }catch(e){
+            result = 0;
+        }
+        $('.str').text(result);
+        arr = [];
+        arr.push(result)
+    }
+    function getAction(desc) {
+        var last = arr.slice(-1);
+        if(
+                (last[0] === '.' || last[0] === '+' || last[0] === '*' || last[0] === '/' || last[0] === '-') &&
+                (  desc === '.' || desc === '+' || desc === '*' || desc === '/' || desc === '-')
+        ) {
+            arr.pop();
+        }else if( desc === 'prev' ){
+            arr.pop();
+            render();
+            return;
+        }
+        arr.push(desc);
+        render();
+    }
+    function render() {
+        str = arr.join('');
+        $('.str').text(str);
+    }
+    function init() {
+        str = '0';
+        arr = [];
+        $('.str').text(str);
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title></title>
+    <script type="text/javascript" src="jquery-1.8.3.min.js"></script>
+</head>
+<body>
+    <script>
+    var str = '{"id":"001",'+
+               '"content":['+
+    '{'+
+        '"adTitle": "title1",'+
+        '"adUrl": "地址图片1",'+
+        '"outputFormat": "image/png",'+
+        '"img": "./bzt2.png"'+
+    '},'+
+    '{'+
+        '"adTitle": "title2",'+
+        '"adUrl": "地址图片2",'+
+        '"outputFormat": "image/png",'+
+        '"img": "./bzt3.png"'+
+    '}'+
+    
+']}';
+var arrObj = JSON.parse(str);
+
+function loadPic(pics, callback, outputFormat){
+    var banners = JSON.parse(localStorage.getItem("banners"));//先去查询banner是否存在
+    if (!banners) {//如果不存在
+        var arr = pics.content;
+
+        for (i = 0; i < arr.length ; i++) {
+            convertImgToBase64(arr[i].img, callback, arr[i].outputFormat,i);
+        }
+    }else{//如果存在
+        if (banners.id==arr.id) {//如果不需要更新
+                 for (i = 0; i < arr.length ; i++) {
+                    convertImgToBase64(banners[i].img, callback, banners[i].outputFormat,i);
+                };
+        }else{//如果需要更新
+            for (i = 0; i < arr.length ; i++) {
+             convertImgToBase64(arr[i].img, callback, arr[i].outputFormat,i);
+            }
+        }
+    }
+    //如果全部图片加载完成之后，将信息保存到本地缓存当中
+    setTimeout('localStorage.setItem("banners",JSON.stringify(arrObj))',5000);
+}
+   function convertImgToBase64(url, callback, outputFormat,number){
+            var canvas = document.createElement('CANVAS'),
+                ctx = canvas.getContext('2d'),
+                img = new Image;
+            img.crossOrigin = 'Anonymous';
+            img.onload = function(){
+                canvas.height = img.height;
+                canvas.width = img.width;
+                ctx.drawImage(img,0,0);
+                var dataURL = canvas.toDataURL(outputFormat || 'image/png');
+                callback.call(this, dataURL,number);
+                canvas = null;
+            };
+            img.src = url;
+        
+        
+}
+  function drawImage(obj,number){
+           // if (arr[number]) {localStorage.setItem("banners"+number,obj)};
+           arrObj.content[number].localImage=obj;
+          convertImageToCanvas(obj,number);
+
+
+  }
+
+  // 把image 转换为 canvas对象  
+function convertImageToCanvas(image,number) { 
+      var   img = new Image; 
+      img.src=image;
+    // 创建canvas DOM元素，并设置其宽高和图片一样   
+    var canvas = document.createElement("canvas");  
+    canvas.width = img.width;  
+    canvas.height = img.height;  
+    // 坐标(0,0) 表示从此处开始绘制，相当于偏移。  
+    canvas.getContext("2d").drawImage(img, 0, 0);
+    var li = document.createElement("li");
+    li.setAttribute( 'data-href' ,arrObj.content[number].adUrl) ;
+    li.setAttribute( 'class' ,"def-btn") ;
+    li.appendChild(canvas); 
+    document.getElementById('testCanvans').appendChild(li);
+}  
+
+    loadPic(arrObj,drawImage,"image/png");
+    </script>
+    <div>
+    <ul id="testCanvans">
+                <li data-href="./banner_incro.html?num=5" class="def-btn"><img src="./images/banner_secound.png"></li>
+                <li data-href="./banner_incro.html?num=2" class="def-btn"><img src="./images/banner_jijindingtou.png"></li>
+                <li data-href="./banner_incro.html?num=0" class="def-btn"><img src="./images/banner_jijindingtou1.png"></li>
+            </ul>
+    </div>
+    <DIV id="canvas"></DIV>
+</body>
+</html>

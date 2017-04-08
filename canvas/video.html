@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no"/>
+
+</head>
+<style>
+    *{
+        box-sizing:border-box;
+        margin:0;
+        padding:0;
+    }
+    html, body{
+        height:100%;
+        width:100%;
+        overflow:hidden;
+        position:relative;
+    }
+    #canvas{
+
+    }
+
+
+</style>
+<body>
+
+<canvas id='canvas' width="500" height="280">
+    <video id='video' width="500" height="280" controls>
+        <source src="./vv/1.mp4" type="video/mp4"></source>
+        <!--<source src="./test.mp4" type="video/mp4"></source>-->
+    </video>
+</canvas>
+<video  width="500" height="280" controls>
+    <source src="./vv/1.mp4" type="video/mp4"></source>
+    <!--<source src="./test.mp4" type="video/mp4"></source>-->
+</video>
+<button id="play">play</button>
+<button id="stop">stop</button>
+<script>
+
+
+    var canvas = document.querySelector('#canvas'),
+            context = canvas.getContext('2d');
+    var video = document.querySelector('#video');
+    document.querySelector('#play').onclick = function() {
+        video.play();
+        drawCanvas();
+
+    }
+    document.querySelector('#stop').onclick = function() {
+        video.pause();
+    }
+    function drawCanvas() {
+        if( video.paused || video.ended ) {
+            return false
+        }
+        context.drawImage(video, 0, 0, 500, 280)
+        var imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+
+        context.clearRect(0,0,canvas.width,canvas.height);
+
+        var numTileRows = 36;
+        var numTileCols = 64;
+        var tileWidth = imageData.width/numTileCols;
+        var tileHeight = imageData.height/numTileRows;
+        for( var r = 0; r < numTileCols; r++ ) {
+            for( var c = 0; c < numTileCols; c++ ) {
+                var x = (c*tileWidth) + (tileWidth/2);
+                var y = (r*tileHeight) + (tileHeight/2);
+                var pos = (Math.floor(y)*(imageData.width*4))+(Math.floor(x)*4);
+                var red = 255 - imageData.data[pos];
+                var green = 255 - imageData.data[pos + 1];
+                var blue =  255 - imageData.data[pos + 2];
+
+                context.fillStyle = 'rgb(' + red + ',' + green + ',' + blue + ')';
+                context.fillRect(x - (tileWidth/2), y - (tileHeight/2), tileWidth, tileHeight);
+            }
+        }
+
+
+
+
+    }
+
+    setInterval(drawCanvas,30)
+
+</script>
+
+</body>
+</html>

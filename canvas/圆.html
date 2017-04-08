@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no"/>
+
+</head>
+<style>
+    *{
+        box-sizing:border-box;
+        margin:0;
+        padding:0;
+    }
+    html, body{
+        height:100%;
+        width:100%;
+        overflow:hidden;
+        position:relative;
+    }
+    #canvas{
+
+    }
+
+
+</style>
+<body>
+
+<canvas id='canvas' width="500" height="280">
+
+</canvas>
+
+<script>
+
+
+    var canvas = document.querySelector('#canvas'),
+            context = canvas.getContext('2d');
+    var deg = Math.PI/180;
+    var i = 0;
+    function run() {
+
+        context.clearRect(0, 0, canvas.width, canvas.height);
+        if( i <= 360 ) {
+            i++;
+            draw(i);
+
+        } else {
+            i = 0;
+        }
+        context.closePath();
+        requestAnimationFrame(run);
+    }
+
+    function draw(i){
+        context.beginPath();
+        context.lineWidth = 1;
+        context.strokeStyle = 'grey';
+        var text = Math.ceil(i/3.6) + '%';
+        context.font = "20px ";
+        context.strokeText(text, 10, 50);
+
+        context.beginPath();
+        context.lineWidth = 5;
+        context.strokeStyle = '#eee';
+        context.arc(100, 100, 50, 0, 360*deg, false);
+        context.stroke();
+
+
+
+
+        context.beginPath();
+        context.strokeStyle = 'orange';
+        context.arc(100, 100, 50, 0, i*deg, false)
+        context.stroke();
+
+        for(var j = 100 ; j > 0; j-=5){
+            context.beginPath();
+            context.lineWidth = 1;
+            context.arc(100, 100, j, 0, i*deg, false)
+            context.stroke();
+        }
+    }
+    requestAnimationFrame(run);
+
+
+
+</script>
+
+</body>
+</html>

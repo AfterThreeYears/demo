@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	<script>
+
+    var obj = {
+        init:function(){
+            //this.fire('bar').hello();
+            this.bar();
+            console.table( this.model().fire() );
+        },
+        model:function(){
+                var modules = {};
+                function define(name,deps,fn){
+                    for(var i = 0; i<deps.length; i++){
+                        //console.log('in');
+                        var item = deps[i];
+                        //console.log(modules); //第一次注册没有依赖的函数，接下来就可以在下面的使用了 {bar:Object}
+                        deps[i] = modules[item];
+                    }
+                    modules[name] = fn.apply(fn,deps);
+                    console.log(modules)
+                }
+                function fire(name){
+                    console.log(modules,1)
+                    return modules[name];
+                }
+            console.log(modules)
+                return {
+                    define:define,
+                    fire:fire
+                }
+        },
+        bar:function(){
+              this.model().define('bar',[],function(){
+                function hello(){
+                    return '我是hello'
+                }
+                return {
+                    hello:hello
+                }
+            })
+        }
+    }
+
+    obj.init();
+
+	/*var model = (function(){
+		var modules = {};
+
+		function define(name,deps,fn){
+			for(var i = 0; i<deps.length; i++){
+				console.log('in')
+				var item = deps[i];
+				console.log(modules) //第一次注册没有依赖的函数，接下来就可以在下面的使用了 {bar:Object}
+				deps[i] = modules[item];
+			}
+			modules[name] = fn.apply(fn,deps);
+			console.log(modules)
+		}
+
+		function fire(name){
+			return modules[name];
+		}
+
+		return {
+			define:define,
+			fire:fire
+		}
+	})();
+
+
+	model.define('bar',[],function(){
+		function hello(who){
+			return 'Let me introduce:' + who
+		}
+
+		return {
+			hello:hello
+		}
+	})
+
+
+
+
+	model.define('foo',['bar'],function(bar){
+		var name = 'vv';
+		function awesome(){
+			console.log( bar.hello( name ).toUpperCase() )
+		}
+
+		return {
+			awesome:awesome
+		}
+
+	})
+
+
+	//var bar = model.fire('bar');
+	var foo = model.fire('foo');
+
+
+	//console.log(bar.hello('vv'));
+	foo.awesome();
+
+
+*/
+
+
+
+	</script>
+</body>
+</html>

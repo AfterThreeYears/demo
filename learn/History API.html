@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no"/>
+    <title>Title</title>
+    <style>
+        /*可以使用normalize.css*/
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            list-style:none;
+        }
+        .content{
+            line-height:30px;
+            margin: 50px;
+        }
+        .menu,.cell{
+            display:inline-block;
+        }
+        .menu{
+            margin-right: 30px;
+            vertical-align:top;
+        }
+        .menu li{
+            height: 30px;
+            text-align: center;
+        }
+        .menu li a{
+            width: 100%;
+            display: inline-block;
+        }
+        .cell li{
+            display:inline-block;
+            min-width: 100px;
+        }
+
+        .on{
+            color: red;
+        }
+
+
+    </style>
+</head>
+<body>
+<div class="content">
+    <ul class="menu">
+        <li>
+            <a href="?name=js" data-name="js">js</a>
+        </li>
+        <li>
+            <a href="?name=node" data-name="node">node</a>
+        </li>
+    </ul>
+    <div class="cell">
+        <ul>
+            <li class="name">名字</li>
+            <li class="desc">描述</li>
+        </ul>
+        <div id="listBox"></div>
+    </div>
+</div>
+<script src="https://cdn.staticfile.org/jquery/3.1.1/jquery.js"></script>
+<script id="tempList" type="text/template">
+    <ul>
+        <li>$name$</li>
+        <li>$desc$</li>
+    </ul>
+</script>
+<script>
+    ;(function(window,undefined){
+        var arr = {
+            js:[
+                {"name":"zepto", "desc":"用于现代浏览器的兼容 jQuery 的库"},
+                {"name":"webpack", "desc":"webpack 是一个 JavaScript 模块打包工具，功能强悍、插件丰富"}
+            ],
+            node:[
+                {"name":"PM2", "desc":"Node 进程管理，内置负载均衡，提供自动重启，热启动等功能，适合在生产环境下使用"},
+                {"name":"express-admin", "desc":"Express 的后端，支持(MySQL, MariaDB, SQLite, PostgreSQL)"}
+            ]
+        };
+        var elOn = null,
+                listBox = $("#listBox"),
+                tempList = $("#tempList").html(),
+                menuOn = "on",
+                a = $(".menu a");
+        String.prototype.temp = function(obj) {
+            //变量替换
+            return this.replace(/\$\w+\$/gi, function(matchs) {
+                var returns = obj[matchs.replace(/\$/g, "")];
+                return (returns + "") == "undefined" ? "" : returns;
+            });
+        };
+        var elMenu = a.on("click", function(event) {
+            var params = this.getAttribute('data-name'), obj = arr[params], query = this.href.split("?")[1];
+            if( history.pushState && query && !$(this).hasClass(menuOn) ) {
+                //如果支持history && 有查询的参数 && 并且不是当前点击的按钮
+                elOn && elOn.removeClass("on");
+                elOn = $(this).addClass("on");
+                var html = '';
+                if( $.isArray(obj) ) {
+                    $.each(obj, function(i, obj) {
+                        html += tempList.temp(obj);
+                    });
+                }
+                listBox.html(html || '<p>无数据</p>');
+                // history处理
+                var title = $(this).text();
+                document.title = title;
+                //判断是trigger还是用户点击的
+                if( event && /\d/.test(event.button) ) {
+                    history.pushState({title:title}, title, location.href.split("?")[0] + "?" + query);
+                }
+            }
+            return false;
+        });
+        var init = function(target) {
+            var query = location.href.split("?")[1],
+                    elTarget = target || null;
+            if( typeof query == "undefined" ) {
+                //如果页面没有a那么返回
+                if( elTarget = elMenu.get(0) ) {
+                    history.replaceState(null, document.title, location.href.split("#")[0] + "?" + elTarget.href.split("?")[1] + location.hash);
+                    //设置search 然后再去查询search
+                    init(elTarget);
+                }
+            } else {
+                //如果有search并且匹配上某一个a链接,那么就选中该a链接
+                elMenu.each(function() {
+                    if( elTarget === null && this.href.split("?")[1] === query ) {
+                        elTarget = this;
+                    }
+                });
+                //如果没有a,那么就去去掉search
+                if( !elTarget ) {
+                    history.replaceState(null, document.title, location.href.split("?")[0]);
+                    init();
+                } else {
+                    $(elTarget).trigger("click");
+                }
+            }
+        };
+        if( history.pushState ) {
+            window.addEventListener("popstate", function() {
+                init();
+            });
+            init();
+        }
+    })(window,undefined);
+</script>
+</body>
+</html>

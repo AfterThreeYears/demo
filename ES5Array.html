@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style type="text/css">
+        ::-moz-selection {
+            background: #000;
+            color: #Fff;
+        }
+        ::selection {
+            background: #000;
+            color: #Fff;
+        }
+    </style>
+</head>
+<body>
+<input value='a' id='a' type="text" placeholder='Date' onfocus='(this.type="date")'/>
+
+<p id='p'>asdasdasdsadasdasd</p>
+<script type="text/javascript">
+
+    /**
+     * Array.forEach
+     */
+
+    var database;
+    database = {
+        users: ['张含韵', '周迅', '刘亦菲'],
+        sendEmail: function (user) {
+
+            return console.log('<div>' + user + '</div>');
+
+            /*if(this.isValidUser(user)) {
+                console.log('你好:' + user);
+            } else {
+                console.log("抱歉，" + user + "，不是你");
+            }*/
+        },
+        isValidUser: function (user) {
+            return /^张/.test(user);
+        }
+    };
+
+    database.users.forEach(database.sendEmail, database);  // 第一个参数是一个必须接受的回调函数，第二个参数是可选的改变上下文的参数,如果这第2个可选参数不指定，则使用全局对象代替（在浏览器是为window），严格模式下甚至是undefined
+    ['张含韵', '周迅', '刘亦菲'].forEach(function(name){
+         return console.log(name)
+    });
+    /**
+     * Array.isArray
+     */
+
+    console.log(Array.isArray([1, 2]))
+
+
+    /**
+     *Array.reduce
+     */
+
+    var sum = [1, 2, 3, 4].reduce(function (prev, curren, index, array) {
+        console.log(prev, curren, index, array);
+        //return prev + curren;
+    })
+
+    console.log(sum);
+
+    //二维数组扁平化
+    var matrix = [
+        [1, 2],
+        [3, 4],
+        [5, 6]
+    ];
+
+    var flatten = matrix.reduce(function (prev, current) {
+        return prev.concat(current);
+    });
+
+    console.log(flatten);
+
+
+    var books = [{
+            title: "Showings",
+            author: "Julian of Norwich",
+            checkouts: 45
+        }, {
+            title: "The Triads",
+            author: "Gregory Palamas",
+            checkouts: 32
+        }, {
+            title: "The Praktikos",
+            author: "Evagrius Ponticus",
+            checkouts: 29
+        }];
+
+    var checkout = books.map(function(books){
+        return books.checkouts;
+    });
+
+    var allsum = checkout.reduce(function(pre,cur){
+        return pre + cur;
+    });
+
+    console.log(allsum);  //106
+
+    /**
+     * Array.map
+     */
+
+    var data = [1, 2, 3, 4];
+    var arrayOfSquares = data.map(function (item) {
+        return item * item;
+    });
+
+    console.log(arrayOfSquares); // 1, 4, 9, 16
+
+
+    var users = [
+        {name: "张含韵", "email": "zhang@email.com"},
+        {name: "江一燕", "email": "jiang@email.com"},
+        {name: "李小璐", "email": "li@email.com"}
+    ];
+
+    var emails = users.map(function (user) {
+        return user.email;
+    });
+
+    console.log( emails.join('|') );
+
+    /**
+     * Array.filter
+     */
+
+    var result = [0,1,2,3].filter(function(item){
+        return item;
+    });
+
+    console.log(result);
+
+</script>
+</body>
+</html>
