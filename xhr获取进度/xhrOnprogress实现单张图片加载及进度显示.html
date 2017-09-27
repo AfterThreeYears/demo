@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<style>
+    span {
+        position:relative;
+        border:1px solid #CCC;
+        background:#EEE;
+        display:inline-block;
+        width:200px;height:200px;
+        line-height:200px;
+        text-align:center;
+        font-size:0px;
+    }
+    span[data-progress]:before {
+        content:attr(data-progress) '%';
+        position:absolute;
+        font-size:32px;
+        color:#666;
+        font-family:Verdana;
+        vertical-align:middle;
+        left:0px;right:0px;
+    }
+    span[data-progress] img {
+        max-width:100%;max-height:100%;
+        visibility:hidden;opacity:0;
+        vertical-align:middle;
+        transition:all 500ms ease;
+    }
+    span[data-progress='100.00']:before {
+        position:static;font-size:0px;
+    }
+    span[data-progress='100.00'] img {
+        visibility:visible;opacity:1;
+    }
+</style>
+<body>
+
+<script>
+    window.onload=function(){
+        var url="http://bpic.588ku.com/element_banner/20/16/12/cf3c53e2f731625dd918b60ebdbde2de.jpg";
+        var span=document.createElement("span");
+        var img=new Image;
+        span.appendChild(img);
+        document.body.appendChild(span);
+        var xhr=new XMLHttpRequest;
+        xhr.open("GET",url,true);
+        xhr.responseType="blob";
+        var length;
+        xhr.onreadystatechange=function(){
+
+            if(xhr.readyState!=2)return;
+            //length=xhr.getResponseHeader('Content-Length');
+
+        };
+        xhr.onprogress=function(e){
+            console.log( e);
+            span.setAttribute("data-progress",(e.loaded/e.total*100).toFixed(2));
+        };
+        xhr.onload=function(e){
+            console.log(e)
+            var mime=xhr.getResponseHeader('Content-Type');
+            var blob=new Blob([xhr.response],{type:mime});
+            img.src=URL.createObjectURL(blob);
+        };
+        xhr.send();
+    };
+</script>
+</body>
+</html>

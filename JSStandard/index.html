@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>5173Javascript规范</title>
+    <style type="text/css">
+        *{
+            margin:0;
+            padding:0;
+        }
+        body{
+            padding:0 50px;
+            border:1px solid red;
+        }
+        h1{
+            background:#ccc;
+            margin:30px 0;
+            color:rgb(0, 102, 204);
+        }
+        table{
+            margin:0 auto;
+        }
+        td{
+            border:1px solid #ccc;
+            border-width:1px 3px 1px 3px;
+            padding:5px;
+        }
+        td.blank{
+            border-width:1px 3px 1px 1px;
+        }
+        td a{
+            margin:5px 10px 5px 0;
+            display:inline-block;
+        }
+        section{
+            margin-bottom:30px;
+        }
+        section span.show{
+            position:relative;
+            top:3px;
+            left:0;
+            display:inline-block;
+            width:0;
+            height:0;
+            border-top:8px solid transparent;
+            border-left:16px solid red;
+            border-bottom:8px solid transparent;
+            cursor:pointer;
+            transition:.2s;
+            transform:rotate(0deg);
+        }
+        section span.rotate{
+
+            transform:rotate(90deg);
+        }
+        .Decision{
+            color:#abcedf;
+            margin:20px 0 0px 0;
+        }
+        .code{
+            background:black;
+            color:white;
+            line-height:20px;
+            margin-top:20px;
+            padding:15px;
+            display:inline-block;
+        }
+        .code p{
+            margin:10px;
+        }
+        .codeList{
+            margin-left:30px;
+            padding-bottom:20px;
+            margin-bottom:20px;
+            border-bottom:1px dashed #ccc;
+        }
+    </style>
+</head>
+<body>
+<div ng-app='jsStandard'>
+    <h1>目录</h1>
+    <table cellspacing='0'>
+        <tr>
+            <td>JavaScript语言规范(强制)</td>
+            <td class='blank'>
+                <a href="#/jsStandardForce/var">变量</a>
+                <a href="#/jsStandardForce/Reserved_word">保留字</a>
+                <a href="#/jsStandardForce/Be_equal_to">等于</a>
+                <a href="#/jsStandardForce/Block_less_Statements">缺少块的语句</a>
+                <a href="#/jsStandardForce/Function_Declarations_Within_Blocks">块内函数声明</a>
+                <a href="#/jsStandardForce/Wrapper_objects_for_primitive_types">基本包装类型</a>
+                <a href="#/jsStandardForce/eval">eval(),new Function(),setTimeout,setInterval</a>
+                <a href="#/jsStandardForce/for-in_loop">for-in</a>
+                <a href="#/jsStandardForce/Multiline_string_literals">多行字符串字面量</a>
+                <a href="#/jsStandardForce/Array_and_Object_literals">Array和Object字面量</a>
+                <a href="#/jsStandardForce/Modifying_prototypes_of_builtin_objects">修改内置对象的原型</a>
+                <a href="#/jsStandardForce/void">void</a>
+                <a href="#/jsStandardForce/with">with(){}</a>
+            </td>
+        </tr>
+        <tr>
+            <td>JavaScript语言规范(建议)</td>
+            <td class='blank'>
+                <a href="#/jsStandardSuggest/useStrict">use Strict(建议使用)</a>
+                <a href="#/jsStandardSuggest/const">常量</a>
+                <a href="#/jsStandardSuggest/closure">闭包</a>
+                <a href="#/jsStandardSuggest/this">this</a>
+                <a href="#/jsStandardSuggest/new">new</a>
+                <a href="#/jsStandardSuggest/semicolon">自动插入分号</a>
+                <a href="#/jsStandardSuggest/++--">++,--</a>
+                <a href="#/jsStandardSuggest/parseInt">ParseInt</a>
+                <a href="#/jsStandardSuggest/Standards_features">标准特性</a>
+                <a href="#/jsStandardSuggest/The_Statement_Versus_Function_Expression">function语句对比function表达式</a>
+                <a href="#/jsStandardSuggest/Multi-level_prototype_hierarchies">多级原型结构</a>
+                <a href="#/jsStandardSuggest/Exceptions">异常处理</a>
+                <a href="#/jsStandardSuggest/contiue">contiue语句</a>
+                <a href="#/jsStandardSuggest/Custom_exceptions">自定义异常</a>
+                <a href="#/jsStandardSuggest/Internet_Explorer_s_Conditional_Comments">IE下的条件注释</a>
+            </td>
+        </tr>
+        <tr>
+            <td>JavaScript编码风格(强制)</td>
+            <td class='blank'>
+                <a href="#/jsStyleForce/Naming">命名</a>
+                <a href="#/jsStyleForce/Compiling">编译压缩</a>
+            </td>
+        </tr>
+        <tr>
+            <td>JavaScript编码风格(建议)</td>
+            <td class='blank'>
+                <a href="#/jsStyleSuggest/Explicit_scope">明确作用域</a>
+                <a href="#/jsStyleSuggest/Comments">注释</a>
+                <a href="#/jsStyleSuggest/Code_formatting">代码格式化</a>
+                <a href="#/jsStyleSuggest/Strings">字符串</a>
+                <a href="#/jsStyleSuggest/Visibility__private_and_protected_fields">可见性（私有和受保护的字段）</a>
+            </td>
+        </tr>
+        <tr>
+            <td>svn和文件命名</td>
+            <td>
+                <a href="#/svnAndfileName/SVN">SVN提交规范</a>
+                <a href="#/svnAndfileName/file_name">文件命名原则</a>
+            </td>
+        </tr>
+    </table>
+    <h1>内容</h1>
+
+    <div ng-view></div>
+</div>
+
+
+<script src='bower_components/angular/angular.js'></script>
+<script src='bower_components/angular-route/angular-route.js'></script>
+<script>
+    angular.module('jsStandard', ['ngRoute'])
+        //js语言规范（强制),js语言规范（建议）,js语言风格（强制）,js语言风格（建议）,svn和文件命名
+            .constant('tpl', 'views/tpl.html')
+        //配置路由
+            .config(function routeConfig($routeProvider, tpl) {
+                $routeProvider
+                        .when('/:title/:name', {
+                            controller:'JS',
+                            templateUrl:tpl
+                        })
+                        .when('/:title/:name', {
+                            controller:'JS',
+                            templateUrl:tpl
+                        })
+                        .when('/:title/:name', {
+                            controller:'JS',
+                            templateUrl:tpl
+                        })
+                        .when('/:title/:name', {
+                            controller:'JS',
+                            templateUrl:tpl
+                        })
+                        .when('/:title/:name', {
+                            controller:'JS',
+                            templateUrl:tpl
+                        })
+                        .otherwise({
+                            redirectTo:'/'
+                        });
+            })
+            .controller('JS', function($scope, $routeParams, $sce, returnUrlName, getText) {
+                //console.log($routeParams);   //Object {name: "var"}
+                $scope.$on('$routeChangeStart', function(ev, next, cur) {
+                    console.log(ev);
+                    console.log(next);
+                    console.log(cur);
+                });
+                $scope.isStatus = false;
+                $scope.routeParams = $routeParams;
+                //console.log($scope.routeParams.title,$scope.routeParams.name);
+                $scope.url = returnUrlName.getName($scope.routeParams.title);
+                $scope.uname = $scope.url;
+                //console.log($scope.url,1);
+                getText.returnText()
+                        .then(
+                        //处理逻辑
+                        function(res) {
+                            $scope.infos = res;
+                        }
+                        , function(err) {
+                            console.log(err)
+                        })
+                        .catch(
+                        //处理错误逻辑
+                        function(res) {
+                        })
+            })
+        /*            .controller('StandardSuggest', function($scope,$routeParams,$sce,returnUrlName,getText) {
+
+                        $scope.url = returnUrlName.getName();
+                        $scope.uname = $scope.url;
+
+                        $scope.isStatus = true;
+
+                        getText.returnText()
+                                .then(
+                                //处理逻辑
+                                function(res){
+                                    $scope.infos = res;
+                                }
+                                ,function(err){
+                                    console.log(err)
+                                })
+                                .catch(
+                                //处理错误逻辑
+                                function(res){
+
+                                })
+                    })
+                    .controller('StyleForce', function($scope,$routeParams,$sce,returnUrlName,getText) {
+
+                        $scope.url = returnUrlName.getName();
+                        $scope.uname = $scope.url;
+
+                        $scope.isStatus = true;
+
+                        getText.returnText()
+                                .then(
+                                //处理逻辑
+                                function(res){
+                                    $scope.infos = res;
+                                }
+                                ,function(err){
+                                    console.log(err)
+                                })
+                                .catch(
+                                //处理错误逻辑
+                                function(res){
+
+                                })
+                    })*/
+            .service('returnUrlName', function($location, $routeParams) {
+                //console.log($location.url())
+                this.list = {
+                    'jsStandardForce':['var',
+                        'Reserved_word',
+                        'Be_equal_to',
+                        'Block_less_Statements',
+                        'Function_Declarations_Within_Blocks',
+                        'Wrapper_objects_for_primitive_types',
+                        'eval',
+                        'for-in_loop',
+                        'Multiline_string_literals',
+                        'Array_and_Object_literals',
+                        'Modifying_prototypes_of_builtin_objects',
+                        'void',
+                        'with'],
+                    'jsStandardSuggest':['useStrict',
+                        'const',
+                        'closure',
+                        'this',
+                        'new',
+                        'semicolon',
+                        '++--',
+                        'parseInt',
+                        'Standards_features',
+                        'The_Statement_Versus_Function_Expression',
+                        'Multi-level_prototype_hierarchies',
+                        'Exceptions',
+                        'contiue',
+                        'Custom_exceptions',
+                        'Wrapper_objects_for_primitive_types',
+                        'Internet_Explorer_s_Conditional_Comments'],
+                    'jsStyleForce':['Naming',
+                        'Compiling'],
+                    'jsStyleSuggest':['Explicit_scope',
+                        'Comments',
+                        'Code_formatting',
+                        'Strings',
+                        'Visibility__private_and_protected_fields'],
+                    'svnAndfileName':['SVN', 'file_name']
+                };
+                this.getName = function(a) {
+                    if( $location.url().indexOf(a) > 0 ) {
+                        //console.log(a)
+                        //console.log(this.list[a])
+                        for( var i = 0; i < this.list[a].length; i += 1 ) {
+                            if( $routeParams.name === this.list[a][i] ) {
+                                return this.list[a][i]
+                            }
+                        }
+                    }
+                }
+            })
+            .factory('getText', function($http, $q) {
+                return {
+                    returnText:function() {
+                        var defer = $q.defer();
+                        //console.log(defer)
+                        var promise = $http({
+                            method:'GET',
+                            url:'./index.json'
+                        }).success(function(data) {
+                            //console.log(data)
+                            return data;
+                            //defer.resolve(data);
+                        }).error(function(error) {
+                            return error
+                            //defer.reject(error);
+                        });
+                        return promise;
+                    }
+                }
+            })
+            .filter('trustHtml', function($sce) {
+                return function(input) {
+                    return $sce.trustAsHtml(input);
+                }
+            });
+
+</script>
+</body>
+</html>

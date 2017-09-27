@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no"/>
+
+<style type="text/css">
+    *{padding: 0;margin:0;}
+    #main{
+        position: relative;
+    }
+    .pin{
+        /*padding: 15px 0 0 15px;*/
+        float:left;
+        width:40%;
+    }
+    .box{
+        padding: 10px;
+        border:1px solid #ccc;
+        box-shadow: 0 0 6px #ccc;
+        border-radius: 5px;
+    }
+    .box img{
+        width:100%;
+        /*height:auto;*/
+    }
+    .none{
+        visibility: hidden;
+    }
+</style>
+</head>
+<body>
+<div id="main">
+   <div id="load" class="none" style="width:100px; height:100px; background: red; position:absolute; bottom:0;"></div>
+</div>
+<script src="js/zepto.js"></script>
+<script src="js/waterfall.js"></script>
+
+</body>
+</html>

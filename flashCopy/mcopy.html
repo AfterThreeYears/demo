@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+<a href="javascript:void(0);"  class="copyNo">点击复制</a>
+<span>  23123123</span>
+<script type="text/javascript">
+
+    document.querySelector('a').addEventListener('touchstart',copyClipboard,false);
+
+    function copyClipboard(){
+        var aux=document.createElement("input");
+        aux.setAttribute("type","text");
+        aux.setAttribute("id","copy-copyTemp");
+        aux.setAttribute("style","position:absolute;opacity:0;");
+        aux.setAttribute("value",document.querySelector('span').innerHTML);
+        document.body.appendChild(aux);
+        aux.select();
+        document.execCommand("copy");
+        document.body.removeChild(aux);
+        alert(1)
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title></title>
+    <style>
+        .ios{
+            font-size:100px;
+        }
+        .andrind{
+            font-size:100px;
+        }
+    </style>
+</head>
+<body>
+
+<a href="b5173://buyerApplication">buyerApplication</a>
+
+<h1 class="ios">ios</h1>
+<h1 class="andrind" >andrind</h1>
+
+<script>
+
+
+
+/*
+    function openApp(url){
+        let  iframe = document.createElement('iframe');
+        iframe.style.display = 'none';
+
+
+        iframe.src = url;
+        document.body.appendChild( iframe );
+
+        setTimeout( () => {
+            alert('打开了');
+            var p = document.createElement('p');
+            p.innerHTML = 123;
+            document.body.appendChild(p);
+        } , 600);
+
+    }
+*/
+
+function openIos(url, callback) {
+    if (!url) {
+        return;
+    }
+    var node = document.createElement('iframe');
+    node.style.display = 'none';
+    var body = document.body;
+    var timer;
+    var clear = function(evt, isTimeout) {
+        (typeof callback === 'function') &&  callback(isTimeout);
+        if (!node) {
+            return;
+        }
+        node.onload = null;
+        body.removeChild(node);
+        node = null;
+
+    };
+    var hide = function(e){
+        clearTimeout(timer);
+        clear(e, false);
+    };
+    node.onload = clear;
+    node.src = url;
+    body.appendChild(node);
+    var now = +new Date();
+    //如果事件失败，则1秒设置为空
+    timer = setTimeout(function(){
+        var newTime = +new Date();
+        if( now - newTime > 600 ){
+            //因为切走了，在切回来需要消耗时间
+            //所以timer即使执行了，但是两者的时间差应该跟500ms有较大的出入
+            //但是实际并不是这样的！
+            clear(null, false);
+        }else{
+            clear(null, true);
+        }
+    }, 500);
+}
+
+//window.location.href = 'b5173://buyerApplication';
+
+openIos('b5173://buyerApplication',function(){
+    alert(11111)
+});
+
+    //document.querySelector('.ios').addEventListener('click',openApp(),false);
+    //document.querySelector('.andrind').addEventListener('click',openApp('b5173://buyerApplication'),false);
+
+</script>
+
+</body>
+</html>

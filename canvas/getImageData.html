@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+<style>
+    *{
+        box-sizing:border-box;
+        margin:0;
+        padding:0;
+    }
+    body{
+
+    }
+    div{
+        height: 100px;
+        width: 100px;
+    }
+
+
+</style>
+<body>
+<h1></h1>
+<div></div>
+<canvas id='canvas' height="600" width="400"></canvas>
+
+<script>
+
+    var canvas = document.querySelector('#canvas'),
+            context = canvas.getContext('2d');
+
+    var img = document.createElement('img');
+    var i = 0;
+    var total;
+    //img.src = 'http://wbbdemo.com/%E7%80%91%E5%B8%83%E6%B5%81/img/body1.jpg';
+    img.src='https://www.vv726.top/demo/img/cat.jpg';
+    var height;
+    var width;
+    var radio;
+    img.onload = function(e){
+
+        total = Math.floor(img.height/100);
+//        var radio = img.height/img.width;
+//        var height = canvas.width*radio;
+//        img.width = canvas.width;
+//        img.height = height;
+
+//        if( img.width > img.height ){
+//            radio = img.height/img.width;
+//            height = canvas.height;
+//            width = canvas.width * radio;
+//        }else{
+//            radio = img.width/img.height;
+//            height = img.height* radio;
+//            width = img.wdith
+//        }
+
+
+
+        run();
+
+    }
+
+    function run(){
+
+        setTimeout(function(){
+            context.drawImage(img,0,i*100,canvas.width,100,0,i*100,canvas.width,100);
+            i++;
+            var data = context.getImageData(0,450,1,1)
+            //console.log(data)
+            //console.log(i,total)
+            if(i < total){
+                run();
+            }
+        },300)
+    }
+
+
+    canvas.onmousemove = function(e){
+        var offset = canvas.getBoundingClientRect();
+        var imageData = context.getImageData(e.clientX - offset.left, e.clientY - offset.top,1,1)
+        var pixel = imageData.data;
+        var pixelColor = 'rgba('+ pixel[0] +','+ pixel[1] +',' + pixel[2] +','+ pixel[3] +')'
+        document.querySelector('h1').innerHTML = pixelColor;
+        document.querySelector('div').style.backgroundColor = pixelColor;
+    }
+
+
+
+
+</script>
+</body>
+</html>

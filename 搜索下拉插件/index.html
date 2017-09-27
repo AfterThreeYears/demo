@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="//cdn.bootcss.com/meyer-reset/2.0/reset.css" rel="stylesheet">
+    <link href="dropSelect.css" rel="stylesheet">
+
+</head>
+
+<body>
+<div class="drop-unit1"></div>
+
+<hr>
+
+<div class="drop-unit"></div>
+
+
+
+<button class="create1">创建第一个</button>
+<button class="create2">创建第2个</button>
+
+<button class="obj1">销毁第一个</button>
+<button class="obj2">销毁第2个</button>
+
+<script src="jquery.js"></script>
+<script src="dropSelect.js"></script>
+<script>
+
+    var obj1;
+    var obj2;
+
+    var arr = [
+        {
+            alias:'第一个别名点',
+            address:'北京天安门XXX地点',
+            id:0,
+            contact:'第一个联系人',
+            phone:13671889974,
+            contact1:'第二个联系人',
+            phone1:13666712525,
+        },
+        {
+            alias:'第一个别名点',
+            address:'上海XXX地点',
+            id:0,
+            contact:'第一个联系人',
+            phone:13671889974,
+            contact1:'第二个联系人',
+            phone1:13666712525,
+        },
+        {
+            alias:'第一个别名点',
+            address:'长沙天安门XXX地点',
+            id:0,
+            contact:'第一个联系人',
+            phone:13671889974,
+            contact1:'第二个联系人',
+            phone1:13666712525,
+        }
+    ];
+
+    $('.create1').click(function(){
+        obj1 = $.fn.dropSelectPlugin({
+            arr:arr,
+            obj:arr[0],
+            el:'.drop-unit1'
+        });
+    });
+
+    $('.create2').click(function(){
+        obj2 = $.fn.dropSelectPlugin({
+            arr:arr,
+            obj:arr[0],
+            el:'.drop-unit'
+        });
+    });
+
+
+
+
+
+
+    $('.obj1').click(function(){
+        obj1.destroy();
+        obj1 = null;
+    });
+
+    $('.obj2').click(function(){
+        obj2.destroy();
+    })
+
+</script>
+
+</body>
+</html>

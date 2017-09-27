@@ -1,0 +1,18 @@
+<section ng-repeat="info in infos.data">
+    <div ng-if="uname===info.mark">
+        <h2>{{info.title}}</h2>
+        <span ng-class="{show:true,rotate:isStatus}" ng-click="isStatus=!isStatus"></span>
+        <span>{{info.explain}}</span>
+        <div ng-show="isStatus">
+            <p class="Decision">Decision</p>
+            <div class="code" >
+                <ul ng-repeat="codes in info.code">
+                    <li class="codeList">
+                        <p ng-bind-html="codes.decision|trustHtml"></p>
+                        <p ng-bind-html="codes.js|trustHtml"></p>
+                    </li>
+                <ul/>
+            </div>
+        </div>
+    </div>
+</section>

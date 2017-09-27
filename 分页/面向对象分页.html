@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<script type="text/javascript" src="https://cdn.staticfile.org/jquery/2.1.4/jquery.min.js"></script>
+	<title>Document</title>
+</head>
+<body>
+	<div id='page'></div>
+	<script>
+	;
+	(function(jQuery, window, document, underfined) {
+		var Page = function page(opt) {
+			this.defaults = {
+				'allNum': 5,
+				'nowNum': 1,
+				'callBack': function() {},
+				'id': 'page'
+			};
+
+			this.options = $.extend({}, this.defaults, opt);
+
+			this.oA = null;
+			this.content = this.options.id;
+			this.obj = $('#' + this.options.id);
+
+		};
+		//首页
+		Page.prototype.firstPage = function() {
+			if (this.options.nowNum >= 6 && this.options.allNum >= 4) {
+				this.oA = $('<a href="#1">首页</a>');
+				this.obj.append(this.oA);
+			}
+			return this;
+		};
+
+
+		//上一页
+		Page.prototype.prevPage = function() {
+			if (this.options.nowNum >= 2) {
+				this.oA = $('<a href="#' + (this.options.nowNum - 1) + '">上一页</a>');
+				this.obj.append(this.oA);
+			}
+			return this;
+		};
+
+
+		Page.prototype.centerPage = function() {
+			//不足5页
+			if (this.options.allNum <= 5) {
+				for (var i = 1; i <= this.options.allNum; i++) {
+					this.oA = $('<a href="#' + i + '"></a>');
+					if (this.options.nowNum === i) {
+						this.oA.html(i);
+					} else {
+						this.oA.html('[' + i + ']');
+					}
+					this.obj.append(this.oA);
+				}
+			} else {
+				//大于5页
+				for (var i = 1; i <= 5; i++) {
+					//第1,2页
+
+					if (this.options.nowNum === 1 || this.options.nowNum === 2) {
+						this.oA = $('<a href="#' + i + '"></a>');
+						if (this.options.nowNum === i) {
+							this.oA.html(i);
+						} else {
+							this.oA.html('[' + i + ']');
+						}
+					} else if ((this.options.allNum - this.options.nowNum) === 0 || (this.options.allNum - this.options.nowNum) === 1) {
+						//第最后一页和倒数第二页
+						this.oA = $('<a href="#' + (this.options.allNum - 5 + i) + '"></a>');
+
+						if ((this.options.allNum - this.options.nowNum) === 0 && i === 5) {
+							//10
+							this.oA.html((this.options.allNum - 5 + i));
+						} else if ((this.options.allNum - this.options.nowNum) === 1 && i === 4) {
+							//9
+							this.oA.html((this.options.allNum - 5 + i));
+						} else {
+							this.oA.html('[' + (this.options.allNum - 5 + i) + ']');
+						}
+					} else {
+						//剩余页
+						this.oA = $('<a href="#' + (this.options.nowNum - 3 + i) + '"></a>');
+						if (i === 3) {
+							this.oA.html(this.options.nowNum);
+						} else {
+							this.oA.html('[' + (this.options.nowNum - 3 + i) + ']');
+						}
+					}
+
+					this.obj.append(this.oA);
+				}
+			}
+			return this;
+		};
+
+		Page.prototype.nextPage = function() {
+			//下一页
+			if (this.options.nowNum < this.options.allNum && this.options.allNum >= 6) {
+				this.oA = $('<a href="#' + (this.options.nowNum + 1) + '">下一页</a>');
+				this.obj.append(this.oA);
+			}
+			return this;
+		};
+
+		Page.prototype.lastPage = function() {
+			//尾页
+			if (this.options.allNum >= 6 && (this.options.nowNum + 2) < this.options.allNum) {
+				this.oA = $('<a href="#' + this.options.allNum + '">尾页</a>');
+				this.obj.append(this.oA);
+			}
+			return this;
+		};
+
+		Page.prototype.callBacks = function() {
+			//回调
+			this.options.callBack(this.options.allNum, this.options.nowNum);
+			return this;
+		};
+
+
+		Page.prototype.isClick = function() {
+			var aA = $('a'),
+				num = 0,
+				_this = this;
+			//点击link
+			aA.click(function(e) {
+				num = ($(this).attr('href').substring(1)) * 1;
+				_this.obj.html(' ');
+				new Page({
+					allNum: _this.options.allNum,
+					nowNum: num,
+					id: _this.content,
+					callBack: _this.options.callBack
+				}).firstPage().prevPage().centerPage().nextPage().lastPage().isClick().callBacks();
+				//防止url变化
+				return false;
+			});
+			return this;
+		};
+
+		$.fn.myPage = function(options) {
+			return new Page(options);
+		};
+	})(jQuery, window, document);
+	</script>
+	<script>
+		$('#page').myPage({
+			allNum: 10,  //总页数
+			nowNum: 9,	//当前页数
+			id: 'page',  //放置的容器id
+			callBack: function(all, now) {  //回调
+				console.log(all, now);
+			}
+		})
+		.firstPage()  //添加首页
+		.prevPage()   //添加上一页
+		.centerPage()   //添加中间页
+		.nextPage()    //添加下一页
+		.lastPage()    //添加尾页
+		.isClick()    //添加更换页面点击事件
+
+	</script>
+</body>
+</html>
+
+
+

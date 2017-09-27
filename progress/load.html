@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        *{
+            padding: 0;
+            margin:0;
+        }
+        body{
+            width:100%;
+        }
+        .progress{
+            position:fixed;
+            top:0;
+            height:3px;
+            background:#abcdef;
+        }
+        .box1{
+            position:fixed;
+            top:50%;
+            left:200px;
+        }
+        .progress1{
+            height:20px;
+            border:1px solid red;
+            background:#abcdef;
+        }
+    </style>
+</head>
+<body>
+<div class="box" style="width:100%;">
+    <div class="progress"></div>
+</div>
+<div class="box1" style="width:30%;" >
+    <div class="progress1">加载中</div>
+</div>
+<iframe src="//baidu.com/" frameborder="0"></iframe>
+<!--
+<iframe src="http://163.com/" frameborder="0"></iframe>
+-->
+<!--
+<iframe src="http://qq.com/" frameborder="0"></iframe>
+-->
+<!--
+<script src="//cdn.bootcss.com/jquery/1.8.2/jquery.js"></script>
+-->
+<!--zepto务必记得引入动画库-->
+<script src="https://cdn.staticfile.org/zepto/1.0rc1/zepto.min.js"></script>
+<script src="progress_plugin.js"></script>
+<script>
+    ;(function(){
+        var obj = {
+            init:function(){
+                /**
+                 * 「使用说明」
+                 * opt可以不传，那么使用默认的值,默认的class为$(".progress")，
+                 * 如果传opt的话，
+                 * 那么
+                 * 1.progress是初始位置,默认是1
+                 * 2.el 是加载条的class 请输入「 $(".progress1") 」这样的方式
+                 * 3.style是样式，暂时只支持宽度
+                 * 4.bigValue结束的位置,默认是98
+                 * 5:务必在DOM加载完毕以后设置window上加上loaded属性，并且设置为true
+                 * window.onload = function(){
+                     window.loaded = true;
+                   };
+                 */
+                var opt = {
+                    progress : 1,
+                    el : $(".progress1"),
+                    style:{'width':'50%','opacity':'1'},
+                    bigValue:48,
+                    callback:function(){
+                      $('.progress1').text('加载完毕');
+                    }
+                };
+
+                $.fn.progressPlugin();
+                $.fn.progressPlugin(opt);
+
+                window.onload = function(){
+                    window.loaded = true;
+                };
+            }
+        };
+        obj.init();
+
+    })(window);
+</script>
+</body>
+</html>

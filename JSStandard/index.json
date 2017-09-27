@@ -1,0 +1,352 @@
+[{
+  "mark": "var",
+  "title": "变量",
+  "explain": "声明变量必须加上 var 关键字.",
+  "code": [{
+    "decision":"当你没有写 var, 变量就会暴露在全局上下文中, 这样很可能会和现有变量冲突. 另外, 如果没有加上, 很难明确该变量的作用域是什么, 变量也很可能像在局部作用域中, 很轻易地泄漏到 Document 或者 Window 中, 所以务必用 var 去声明变量.",
+    "js":"var name = ok;"
+  },{
+    "decision":"JS没有提供块级作用域：代码块中声明的变量在包含此代码块的函数的任何位置都是可见的。最好在每个函数的开头部分声明所有变量。",
+    "js":"var foo = function(){ <br> &nbsp;&nbsp;var i; <br> &nbsp;&nbsp;for (i = 0 ; i < xxx.length; i+=1 ) {<br>&nbsp;&nbsp;&nbsp;&nbsp;//code<br>&nbsp;&nbsp;}<br>}"
+  }]
+}, {
+  "mark": "Reserved_word",
+  "title": "保留字",
+  "explain": "",
+  "code": [{
+    "decision":"关键字",
+    "js":"break do instanceof typeof case else new varcatch finally return void continue for switch while debugger function this with default if throw deletein try"
+  },{
+    "decision":"保留字",
+    "js":"abstract enum int short boolean export interface static byte extends long super char final native synchronized class float package throws const goto private transient debugger implements protected volatile double import public"
+  }]
+}, {
+  "mark": "Be_equal_to",
+  "title": "等于",
+  "explain": "Javascript有两组相等运算符，一组是==和!=，另一组是===和!==。前者只比较值的相等，后者除了值以外，还比较类型是否相同。",
+  "code": [{
+    "decision":"请尽量不要使用前一组，永远只使用===和!==。因为==默认会进行类型转换，规则十分难记。如果你不相信的话，请回答下面五个判断式的值是true还是false：",
+    "js":"false == 'false' <br> false == undefined <br> false == null <br> null == undefined <br> 0 == ''<br>前三个是false，后两个是true。"
+  }]
+}, {
+  "mark": "Block_less_Statements",
+  "title": "缺少块的语句",
+  "explain": "如果循环和判断的代码体只有一行，Javascript允许该区块（block）省略大括号。",
+  "code": [{
+      "decision": "下面的代码",
+      "js": "缺少块的语句<br>if (a) b(); c();<br>原意可能是<br>if (a) { b(); c();}<br>但是，实际效果是<br>if (a) { b();} c();<br>因此总是使用大括号表示区块。"
+    }]
+}, {
+  "mark": "Function_Declarations_Within_Blocks",
+  "title": "块内函数声明",
+  "explain": "不要在块内声明一个函数。",
+  "code": [{
+    "decision": "不要写成:",
+    "js": "if (x) {<br>&nbsp;&nbsp;function foo() {<br>}"
+  },{
+    "decision": "虽然很多 JS 引擎都支持块内声明函数, 但它不属于 ECMAScript 规范 (见 ECMA-262, 第13和14条). 各个浏览器糟糕的实现相互不兼容, 有些也与未来 ECMAScript 草案相违背. ECMAScript 只允许在脚本的根语句或函数中声明函数. 如果确实需要在块中定义函数, 建议使用函数表达式来初始化变量:",
+    "js": "if (x) {<br>&nbsp;&nbsp;var foo = function() {<br>}"
+  }]
+}, {
+  "mark": "Wrapper_objects_for_primitive_types",
+  "title": " 基本包装类型",
+  "explain": "不要",
+  "code": [{
+    "decision": "没有任何理由去封装基本类型, 另外还存在一些风险:",
+    "js": "var x = new Boolean(false);<br>&nbsp;&nbsp;if (x) {<br>alert('hi');  &nbsp;&nbsp;// Shows 'hi'.<br>}"
+  },{
+    "decision": "除非明确用于类型转换, 其他情况请千万不要这样做！但是有时用作 number, string 或 boolean时, 类型的转换会非常实用.",
+    "js": "var x = Boolean(0);<br>if (x) {<br>&nbsp;&nbsp;alert('hi'); <br> // This will never be alerted.<br>}<br>typeof Boolean(0) == 'boolean';<br>typeof new Boolean(0) == 'object';"
+  }]
+}, {
+  "mark": "eval",
+  "title": "eval(),new Function(),setTimeout,setInterval",
+  "explain": "禁止eval() new Fcuntion(),定时器二人组禁止传字符串",
+  "code": [{
+    "decision": "eval用来直接执行一个字符串。这条语句也是不应该使用的，因为它有性能和安全性的问题，并且代码更难阅读。eval能够做到的事情，不用它也能做到。比如eval('myValue = myObject.' + myKey + ';');可以直接写成myValue = myObject[myKey];至于ajax操作返回的json字符串，可以使用官方网站提供的解析器json_parse.js运行。",
+    "js": "if (x) {<br>&nbsp;&nbsp;function foo() {<br>}"
+  },{
+    "decision": "以下是被禁止的：",
+    "js": "var doAdd = new Function('iNum', 'alert(iNum + 10)');<br>setTimeout('alert(1)')<br>setInterval('alert(1)')"
+  }]
+}, {
+  "mark": "for-in_loop",
+  "title": " for-in 循环",
+  "explain": "只用于 object/map/hash 的遍历",
+  "code": [{
+    "decision": "无",
+    "js": ""
+  }]
+}, {
+  "mark": "Multiline_string_literals",
+  "title": " 多行字符串",
+  "explain": "不要使用",
+  "code": [{
+    "decision": "不要这样写长字符串:",
+    "js": "var myString = '第一条字符串\\<br>第二条字符串\\<br>第三条字符串\\<br>第四条字符串\\'"
+  },{
+    "decision": "在编译时, 不能忽略行起始位置的空白字符; '/' 后的空白字符会产生奇怪的错误; 虽然大多数脚本引擎支持这种写法, 但它不是 ECMAScript 的标准规范.",
+    "js": ""
+  }]
+}, {
+  "mark": "Array_and_Object_literals",
+  "title": " Array 和 Object 直接量",
+  "explain": "使用 Array 和 Object 语法, 而不使用 Array 和 Object 构造器.使用 Array 构造器很容易因为传参不恰当导致错误.",
+  "code": [{
+    "decision": "如果传入一个参数而不是2个参数, 数组的长度很有可能就不是你期望的数值了.为了避免这些歧义, 我们应该使用更易读的直接量来声明.虽然 Object 构造器没有上述类似的问题, 但鉴于可读性和一致性考虑, 最好还是在字面上更清晰地指明.",
+    "js": "var o = new Object();<br>var o2 = new Object();<br>o2.a = 0;<br>o2.b = 1;<br>o2.c = 2;<br>o2['strange key'] = 3;"
+  },{
+    "decision": "应该写成:",
+    "js": "var o = {};<br>var o2 = {<br>a: 0,<br>b: 1,<br>c: 2,<br>'strange key': 3<br>};"
+  }]
+}, {
+  "mark": "Modifying_prototypes_of_builtin_objects",
+  "title": " 修改内置对象的原型",
+  "explain": "千万不要修改内置对象, 如 Object.prototype 和 Array.prototype 的原型. 而修改内置对象, 如 Function.prototype 的原型, 虽然少危险些, 但仍会导致调试时的诡异现象. 所以也要避免修改其原型.",
+  "code": [{
+    "decision": "无",
+    "js": ""
+  }]
+}, {
+  "mark": "void",
+  "title": " void",
+  "explain": "在大多数语言中，void都是一种类型，表示没有值。但是在Javascript中，void是一个运算符，接受一个运算数，并返回undefined。",
+  "code": [{
+    "decision": "这个命令没什么用，而且很令人困惑，建议避免使用。",
+    "js": "void 0; // undefined"
+  }]
+},{
+  "mark": "with",
+  "title": " with(){}",
+  "explain": "使用 with 让你的代码在语义上变得不清晰. ",
+  "code": [{
+    "decision": "因为 with 的对象, 可能会与局部变量产生冲突, 从而改变你程序原本的用义. 下面的代码是干嘛的?",
+    "js": "with (foo) {<br>&nbsp;&nbsp;var x = 3;<br>&nbsp;&nbsp;return x;<br>}<br>答案: 任何事. 局部变量 x 可能被 foo 的属性覆盖, 当它定义一个 setter 时, 在赋值 3 后会执行很多其他代码. 所以不要使用 with 语句."
+  }]
+},{
+  "mark": "useStrict",
+  "title": " 严格模式",
+  "explain": "除了正常运行模式，ECMAscript 5添加了第二种运行模式：'严格模式'（strict mode）。顾名思义，这种模式使得Javascript在更严格的条件下运行。 ",
+  "code": [{
+    "decision": "消除Javascript语法的一些不合理、不严谨之处，减少一些怪异行为;<br>消除代码运行的一些不安全之处，保证代码运行的安全；<br>提高编译器效率，增加运行速度；<br>为未来新版本的Javascript做好铺垫。",
+    "js": ""
+  },{
+    "decision": "进入'严格模式'的标志，是下面这行语句：。(PS:不推荐放入全局，可以放入局部)",
+    "js": "'use strict'<br>老版本的浏览器会把它当作一行普通字符串，加以忽略."
+  },{
+    "decision": "严格模式对Javascript的语法和行为，都做了一些改变。",
+    "js": ""
+  },{
+    "decision": "全局变量显式声明",
+    "js": "v = 1; // 报错，v未声明<br>因此，严格模式下，变量都必须先用var命令声明，然后再使用。"
+  },{
+    "decision": "静态绑定",
+    "js": "Javascript语言的一个特点，就是允许'动态绑定'，即某些属性和方法到底属于哪一个对象，不是在编译时确定的，而是在运行时（runtime）确定的。严格模式对动态绑定做了一些限制。某些情况下，只允许静态绑定。也就是说，属性和方法到底归属哪个对象，在编译阶段就确定。这样做有利于编译效率的提高，也使得代码更容易阅读，更少出现意外。"
+  },{
+    "decision": "禁止使用with语句",
+    "js": "因为with语句无法在编译时就确定，属性到底归属哪个对象。<br>'use strict';<br>var v = 1;<br>with (o){ // 语法错误<br>&nbsp;&nbsp;v = 2;<br>}"
+  },{
+    "decision": "创设eval作用域,正常模式下，Javascript语言有两种变量作用域（scope）：全局作用域和函数作用域。严格模式创设了第三种作用域：eval作用域。",
+    "js": "正常模式下，eval语句的作用域，取决于它处于全局作用域，还是处于函数作用域。严格模式下，eval语句本身就是一个作用域，不再能够生成全局变量了，它所生成的变量只能用于eval内部。<br>'use strict';<br>var x = 2;<br>console.info(eval('var x = 5; x')); // 5<br>console.info(x); // 2"
+  },{
+    "decision": "增强的安全措施",
+    "js": "禁止this关键字指向全局对象<br>function f(){<br>&nbsp;&nbsp;return !this;<br>}<br>// 返回false，因为'this'指向全局对象，'!this'就是false<br>function f(){<br>&nbsp;&nbsp;'use strict';<br>&nbsp;&nbsp;return !this;<br>}<br>// 返回true，因为严格模式下，this的值为undefined，所以'!this'为true。<br>因此，使用构造函数时，如果忘了加new，this不再指向全局对象，而是报错。"
+  },{
+    "decision": "禁止在函数内部遍历调用栈",
+    "js": "function f1(){<br>&nbsp;&nbsp;'use strict';<br>&nbsp;&nbsp;f1.caller; // 报错<br>&nbsp;&nbsp;f1.arguments; // 报错}<br>f1();"
+  },{
+    "decision": "禁止删除变量",
+    "js": "严格模式下无法删除变量。只有configurable设置为true的对象属性，才能被删除。'use strict';<br>var x;<br>delete x; // 语法错误<br>var o = Object.create(null, {'x': {<br>&nbsp;&nbsp;value: 1,<br>&nbsp;&nbsp;configurable: true<br>}});<br>delete o.x; // 删除成功"
+  },{
+    "decision":"重名错误,严格模式新增了一些语法错误。",
+    "js":""
+  },{
+    "decision":"正常模式下，如果对象有多个重名属性，最后赋值的那个属性会覆盖前面的值。严格模式下，这属于语法错误。",
+    "js":"'use strict';<br>var o = {<br>&nbsp;&nbsp;p: 1,<br>&nbsp;&nbsp;p: 2<br>}; // 语法错误"
+  },{
+    "decision":"正常模式下，如果函数有多个重名的参数，可以用arguments[i]读取。严格模式下，这属于语法错误。",
+    "js":"'use strict';<br>function f(a, a, b) { // 语法错误<br>&nbsp;&nbsp;return ;<br>}"
+  }]
+},{
+  "mark": "const",
+  "title": "常量",
+  "explain": "常量的形式如: NAMES_LIKE_THIS, 即使用大写字符, 并用下划线分隔. 你也可用 @const 标记来指明它是一个常量. 但请永远不要使用 const 关键词.",
+  "code": [{
+    "decision": "对于基本类型的常量, 只需转换命名.",
+    "js": "goog.example.SECONDS_IN_A_MINUTE = 60;"
+  },{
+    "decision": "对于非基本类型, 使用 @const 标记.",
+    "js": "goog.example.SECONDS_TABLE = {<br>&nbsp;&nbsp;minute: 60,<br>&nbsp;&nbsp;hour: 60 * 60,<br>&nbsp;&nbsp;day: 60 * 60 * 24<br>}"
+  }]
+},{
+  "mark": "closure",
+  "title": " 闭包",
+  "explain": "闭包是指在 JavaScript 中，内部函数总是可以访问其所在的外部函数中声明的参数和变量，即使在其外部函数被返回（寿命终结）了之后。 ",
+  "code": [{
+    "decision": "1.保持变量不污染全局。<br>2.缓存数据。<br>3.定义私有属性和方法;<br>and More..欢迎补充。修改日期2015.10.15",
+    "js": "一个例子：<br>function foo() {<br>&nbsp;&nbsp;var a = 1;<br>&nbsp;&nbsp;function geta() {<br>&nbsp;&nbsp;&nbsp;&nbsp;a++;<br>&nbsp;&nbsp;&nbsp;&nbsp;return a;<br>&nbsp;&nbsp;}<br>&nbsp;&nbsp;return geta;<br>}<br>myfunc = foo();<br>myfunc(); // return 2<br>myfunc(); //return 3"
+  }]
+},{
+  "mark": "this",
+  "title": "this",
+  "explain": "仅在对象构造器, 方法, 闭包中使用.",
+  "code": [{
+    "decision": "this 的语义很特别. 有时它引用一个全局对象(大多数情况下), 调用者的作用域(使用 eval时), DOM 树中的节点(添加事件处理函数时), 新创建的对象(使用一个构造器), 或者其他对象(如果函数被 call() 或 apply()).",
+    "js": "使用时很容易出错, 所以只有在下面两个情况时才能使用:<br>1.在构造器中<br>2.对象的方法(包括创建的闭包)中"
+  }]
+},{
+  "mark": "new",
+  "title": "new",
+  "explain": "Javascript是世界上第一个被大量使用的支持Lambda函数的语言，本质上属于与Lisp同类的函数式编程语言。但是当前世界，90%以上的程序员都是使用面向对象编程。为了靠近主流，Javascript做出了妥协，采纳了类的概念，允许根据类生成对象。",
+  "code": [{
+    "decision": "类被定义了以后，生成一个对象.",
+    "js": "function Foo(){<br>&nbsp;&nbsp;//code<br>}<br>new xxx();<br>这种利用函数生成类、利用new生成对象的语法，其实非常奇怪，一点都不符合直觉。而且，使用的时候，很容易忘记加上new，就会变成执行函数，然后莫名其妙多出几个全局变量。所以，建议不要这样创建对象，而采用一种变通方法。"
+  },{
+    "decision": "如果有Object.create方法,那么使用它创建对象。否则自定义一个方法。",
+    "js": "Object.beget = function (o) {<br>&nbsp;&nbsp;var F = function (o) {};<br>&nbsp;&nbsp;F.prototype = o ;<br>&nbsp;&nbsp;return new F;<br>};<br>创建对象时就利用这个函数，对原型对象进行操作:<br>var Cat = {<br>&nbsp;&nbsp;name:'balabala', <br>&nbsp;&nbsp;saying:'mmmmm'<br>};<br>var myCat = Object.beget(Cat);"
+  }]
+},{
+  "mark": "semicolon",
+  "title": "自动插入分号",
+  "explain": "JS自动修复机制：通过自动插入分号来修正有缺损的程序。但是，它可能会掩盖更为严重的错误。",
+  "code": [{
+    "decision": "对于基本类型的常量, 只需转换命名.",
+    "js": "return //自动插入分号会让它返回undefined<br>{<br>&nbsp;&nbsp;status : true<br>};"
+  }]
+},{
+  "mark": "++--",
+  "title": "++--",
+  "explain": "自增（++）和自减（--）运算符，放在变量的前面或后面，返回的值不一样，很容易发生错误。",
+  "code": [{
+    "decision": "事实上，所有的++运算符都可以用'+= 1'代替。",
+    "js": ""
+  }]
+},{
+  "mark": "parseInt",
+  "title": "parseInt",
+  "explain": "建议永远加上第二个参数。",
+  "code": [{
+    "decision": "parseInt是一个把字符串转换为整数的函数。它遇到非数字时会停止解析，parseInt('16')和parseInt('16 tons')产生的结果相同。如果该字符串第1个字符是0,那么该字符串会基于八进制而不是十进制来求值。在八进制中，8和9不是数字，所以parseInt('08')和parseInt('09')结果都是0。这个错误会导致程序解析日期和时间时出现问题。幸运的是，parseInt可以接受一个基数作为参数，parseInt('08',10)结果为8，建议加上基数参数。",
+    "js": ""
+  }]
+},{
+  "mark": "Standards_features",
+  "title": "标准特性.",
+  "explain": "总是优于非标准特性",
+  "code": [{
+    "decision": "最大化可移植性和兼容性, 尽量使用标准方法而不是用非标准方法, (比如, 优先用string.charAt(3) 而不用 string[3] , 通过 DOM 原生函数访问元素, 而不是使用应用封装好的快速接口.",
+    "js": "return"
+  }]
+},{
+  "mark": "The_Statement_Versus_Function_Expression",
+  "title": "function语句对比function表达式.",
+  "explain": "建议优先使用funciton表达式",
+  "code": [{
+    "decision": "在Javascript中定义一个函数，有两种写法：<br>&nbsp;&nbsp;function foo() { }<br>和<br>&nbsp;&nbsp;var foo = function () { }<br>两种写法完全等价。但是在解析的时候，前一种写法会被解析器自动提升到代码的头部，因此违背了函数应该先定义后使用的要求，所以建议定义函数时，全部采用后一种写法。",
+    "js": ""
+  }]
+},{
+  "mark": "Multi-level_prototype_hierarchies",
+  "title": " 多级原型结构.",
+  "explain": "多级原型结构是指 JavaScript 中的继承关系. 当你自定义一个D类, 且把B类作为其原型, 那么这就获得了一个多级原型结构. 这些原型结构会变得越来越复杂!",
+  "code": [{
+    "decision": "",
+    "js": ""
+  }]
+},{
+  "mark": "Exceptions",
+  "title": "异常处理.",
+  "explain": "你在写一个比较复杂的应用时, 不可能完全避免不会发生任何异常. 大胆去用吧.",
+  "code": [{
+    "decision": "",
+    "js": ""
+  }]
+},{
+  "mark": "contiue",
+  "title": "contiue.",
+  "explain": "少用，提升性能",
+  "code": [{
+    "decision": "",
+    "js": ""
+  }]
+},{
+  "mark": "Custom_exceptions",
+  "title": "自定义异常.",
+  "explain": "有时发生异常了, 但返回的错误信息比较奇怪, 也不易读. 虽然可以将含错误信息的引用对象或者可能产生错误的完整对象传递过来, 但这样做都不是很好, 最好还是自定义异常类, 其实这些基本上都是最原始的异常处理技巧. 所以在适当的时候使用自定义异常.",
+  "code": [{
+    "decision": "",
+    "js": ""
+  }]
+},{
+  "mark": "Internet_Explorer_s_Conditional_Comments",
+  "title": "IE下的条件注释.",
+  "explain": "不要使用",
+  "code": [{
+    "decision": "不要这样子写:",
+    "js": "var f = function () {<br>&nbsp;&nbsp;/*@cc_on if (@_jscript) { return 2* @*/  3; /*@ } @*/<br>};<br>条件注释妨碍自动化工具的执行, 因为在运行时, 它们会改变 JavaScript 语法树."
+  }]
+},{
+  "mark": "Naming",
+  "title": "命名.",
+  "explain": "统一使用小驼峰的写法,文件或类中的 私有 属性, 变量和方法名应该以下划线 '_' 开头,  保护属性,变量和方法名不需要下划线开头, 和公共变量名一样.",
+  "code": [{
+    "decision": "不容易发现和调试全局命名的冲突, 多个系统集成时还可能因为命名冲突导致很严重的问题. 为了提高 JavaScript 代码复用率, 我们遵循下面的约定以避免冲突.",
+    "js": "为全局代码使用命名空间.<br>在全局作用域上, 使用一个唯一的, 与工程/库相关的名字作为前缀标识. 比如, 你的工程是 'Project Sloth', 那么命名空间前缀可取为 sloth.*.<br>var sloth = {};<br>sloth.sleep = function() {<br>&nbsp;&nbsp;...<br>};"
+  }]
+},{
+  "mark": "Compiling",
+  "title": "编译压缩.",
+  "explain": "建议您去使用gulp,grunt,fis等工具",
+  "code": [{
+    "decision": "",
+    "js": ""
+  }]
+},{
+  "mark": "Explicit_scope",
+  "title": "明确作用域.",
+  "explain": "任何时候都需要",
+  "code": [{
+    "decision": "任何时候都要明确作用域 - 提高可移植性和清晰度. 例如, 不要依赖于作用域链中的 window 对象. 可能在其他应用中, 你函数中的 window 不是指之前的那个窗口对象.:",
+    "js": ""
+  }]
+},{
+  "mark": "Comments",
+  "title": "注释.",
+  "explain": "使用 JSDoc",
+  "code": [{
+    "decision": "我们使用 JSDoc 中的注释风格. 行内注释使用 // 变量 的形式. 另外, 我们也遵循 C++ 代码注释风格 . 这也就是说你需要:<br><br>版权和著作权的信息,<br>文件注释中应该写明该文件的基本信息(如, 这段代码的功能摘要, 如何使用, 与哪些东西相关), 来告诉那些不熟悉代码的读者.<br>类, 函数, 变量和必要的注释,<br>期望在哪些浏览器中执行,<br>正确的大小写, 标点和拼写.",
+    "js": ""
+  }]
+},{
+  "mark": "Code_formatting",
+  "title": " 代码格式化.",
+  "explain": "主要依照C++ 格式规范",
+  "code": [{
+    "decision": "分号会被隐式插入到代码中, 所以你务必在同一行上插入大括号，<br>如果初始值不是很长, 就保持写在单行上，<br>初始值占用多行时, 缩进2个空格，<br>比较长的标识符或者数值, 不要为了让代码好看些而手工对齐，<br>尽量让函数参数在同一行上. <br>如果一行超过 80 字符, 每个参数独占一行, 并以4个空格缩进, 或者与括号对齐, 以提高可读性. 尽可能不要让每行超过80个字符",
+    "js": ""
+  }]
+},{
+  "mark": "Strings",
+  "title": " 字符串",
+  "explain": "使用 单引号 优于 双引号",
+  "code": [{
+    "decision": "单引号 (') 优于双引号 (). 当你创建一个包含 HTML 代码的字符串时就知道它的好处了.",
+    "js": "var msg = 'This is some HTML';"
+  }]
+},{
+  "mark": "SVN",
+  "title": "SVN提交规范",
+  "explain": "不允许空日志,不允许小于10个字符",
+  "code": [{
+    "decision": "推荐提交格式:【项目名称】 + 修改内容     如:【RJ-140826-01-0点卡重启免登陆购买】 重新开启免登陆按钮<br>含有不允许提交的文件类型，如:*.bak;*.tmp;*.lib;*.o;*.obj;*.log;*.scc;Thumbs.db;desktop.ini等;<br>含有不允许提交的目录，如:_notes;.DS_Store;_svn;.svn等;<br>大写字母A-Z都不允许提交 ;<br>不能再这个站点images.5173cdn.com新增任何资源并提交，（可以修改原有资源进行提交）。",
+    "js": ""
+  }]
+},{
+  "mark": "file_name",
+  "title": " 文件命名原则",
+  "explain": "js插件",
+  "code": [{
+    "decision": "1，公用部分，如全网站通用的组件如页头页脚，或者其他全网都会用到的组件以fed-开始， 例如页头可以定义为fed-head-；作为标识开始，其他公用组件定义为fed-xxx-(其中xxx为当前组件的标识， 假如当前组件为广告的样式可以定位ad)，在下一层的名称可定义为fed-xxx-yyy(其中yyy为组件xxx的内部结构， 例如若是广告组件的顶部样式可以暂定为fed-ad-top,或者fed-ad-head)。(至于xxx，yyy尽量语义化，不要aa11，aa22之类的)。<br>js文件或插件命名为fed-head.js<br>2，会多次用到，但不是全网站的组件，(亦或是可以部分复用的组件)，可以以mod-(由模块（module）前三个字母而来，大家若觉得不合适可以斟酌个都可接受的)， 为开始标识，假如当前组件为搜索组件可定义为mod-search-,在下以层假如是搜索组件的头部可定义为mod-search-top或者mod-search-head。<br>js文件或插件命名为mod-ad.js。 <br>3,只会用到一次的单独组件，可以以ind-（取至独立（independent）的英文单词前三个字母，若是觉得不妥，可以换个合适的）， 假如当前独立模块客服中心可以暂定为ind-service-,在下一层若是客服头部暂定为ind-service-top或者ind-service-head。<br>js文件或插件命名为ind-service.js。",
+    "js": ""
+  }]
+}]

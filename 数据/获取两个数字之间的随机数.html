@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no"/>
+    <title>Document</title>
+</head>
+<body>
+<form >
+    min:<input type="text" id="min" required="required">
+    <br>
+    max:<input type="text" id="max" required="required">
+
+    <button >click</button>
+</form>
+<script>
+    var btn = document.querySelector('button');
+
+    btn.onclick = function(e){
+        e.stopPropagation();
+        e.preventDefault();
+        var max = document.querySelector('#max').value;
+        var min = document.querySelector('#min').value;
+        var result = Math.random() * (max - min) + min*1;
+        console.log(result)
+        btn.innerHTML = result;
+    }
+
+</script>
+</body>
+</html>
