@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title></title>
+
+    <style>
+        #box li{
+            list-style:none;
+        }
+    </style>
+</head>
+<body>
+
+<div>
+    <!--<ul id="box">
+        <li data-href="" class="banner_img"><img
+                src="https://wap.bestpay.com.cn/assets/images/mob-images/home/group.jpg"></li>
+        <li data-href="" class="banner_img"><img
+                src="https://wap.bestpay.com.cn/assets/images/mob-images/group/group.gif"></li>
+        <li data-href="" class="banner_img"><img
+                src="https://wap.bestpay.com.cn/assets/images/mob-images/group/tg_hover.gif"></li>
+    </ul>-->
+</div>
+<script src="//cdn.bootcss.com/jquery/2.1.2/jquery.min.js"></script>
+<script>
+
+    $.ajax({
+        url:"img.json",
+        type:"GET",
+        dataType:"json"
+    }).then(function(data) {
+        single.loadImageAsync(data,0).then(function(){
+            alert('全部加载完成')
+        })
+    }).fail(function(err) {
+        console.log(err)
+    });
+
+
+    var single = {
+        box:{},
+        loadImageAsync:function (arr,index) {
+
+            if( false ){
+                var obj = JSON.parse(localStorage.store);
+                for( var i in obj){
+                    var img = document.createElement('img');
+                    img.src = obj[i].base;
+                    document.querySelector('body').appendChild(img);
+
+
+                }
+            }else{
+                var url = arr.shift().img;
+                return new Promise(function(resolve, reject) {
+                    var image = new Image();
+
+
+                    var store = {},
+                    // 创建canvas DOM元素
+                            canvas = document.createElement('canvas'),
+                            cxt = canvas.getContext("2d");
+                    var base64Str = "";
+
+                    image.onload = function() {
+
+                        // canvas设置其宽高和图片一样
+                        canvas.width = image.width,
+                                canvas.height = image.height;
+                        // 坐标(0,0) 表示从此处开始绘制，相当于偏移
+                        cxt.drawImage(image, 0, 0);
+                        //console.log(canvas)
+                        //借助Canvas自己的API - toDataURL()转换base64
+                        base64Str = canvas.toDataURL();
+
+                        var img = document.createElement('img');
+                        img.src = base64Str;
+                        document.querySelector('body').appendChild(img);
+
+                        //设置localstorage
+                        single.box['img' + index] = {};
+                        single.box['img' + index]['src'] = url;
+                        single.box['img' + index]['base'] = base64Str;
+
+
+                        index++;
+                        if( arr.length > 0 ){
+                            single.loadImageAsync(arr,index);
+
+                        }else{
+                            localStorage.store = JSON.stringify(single.box);
+                            resolve(arr);
+                            console.log('end')
+                        }
+
+
+
+
+                    };
+
+                    image.onerror = function() {
+                        reject(new Error('Could not load image at ' + url));
+                    };
+
+                    image.src = url;
+                });
+            }
+
+
+        }
+
+    }
+
+
+
+
+
+
+
+
+
+</script>
+</body>
+</html>

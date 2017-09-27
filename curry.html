@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+<button id="my-btn">my-btn</button>
+<script>
+
+
+    function curry(fn){
+        "use strict";
+        var args = Array.prototype.slice.call(arguments,1);
+        return function(){
+            var innerArgs = Array.prototype.slice.call(arguments);
+            var finalArgs = args.concat(innerArgs);
+            console.log(finalArgs);
+            return fn.apply(null,finalArgs);
+        }
+    }
+
+    var fn = function(){
+        "use strict";
+        var result = 0;
+        for(var i = 0; i <arguments.length; i++){
+            result += arguments[i];
+        }
+        return result;
+    };
+    /*
+     var curriedAdd = curry(fn,5);
+     console.log(curriedAdd(3));*/
+
+    var currieAdd = curry(fn);
+    console.log( currieAdd(5,6,7) );
+
+    /***********实现bind***************/
+
+    function bind(fn,obj){
+        "use strict";
+        var args = Array.prototype.slice.call(arguments,2);
+        return function(){
+            var innerArgs = Array.prototype.slice.call(arguments);
+            var finalArgs = args.concat(innerArgs);
+            return fn.apply(obj,finalArgs);
+        }
+    }
+
+   /* var EventUtil = {
+        addHandler: function(element, type, handler){
+            if (element.addEventListener){
+                element.addEventListener(type, handler, false);
+            } else if (element.attachEvent){
+                element.attachEvent("on" + type, handler);
+            } else {
+                element["on" + type] = handler;
+            }
+        },
+        removeHandler: function(element, type, handler){
+            if (element.removeEventListener){
+                element.removeEventListener(type, handler, false);
+            } else if (element.detachEvent){
+                element.detachEvent("on" + type, handler);
+            } else {
+                element["on" + type] = null;
+            } }
+    };*/
+
+
+
+    var handler = {
+        message: "Event handled",
+        handleClick: function(name, event){
+            alert(this.message + ":"+ name + ":"+ event.type);
+        }
+    };
+
+    var btn = document.getElementById("my-btn");
+    btn.addEventListener("click", bind(handler.handleClick, handler,btn),false);
+
+
+</script>
+</body>
+</html>

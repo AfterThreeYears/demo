@@ -22,13 +22,18 @@
 
 <button class="obj1">销毁第一个</button>
 <button class="obj2">销毁第2个</button>
+<<<<<<< HEAD
 
+=======
+<script src="//cdn.bootcss.com/underscore.js/1.8.3/underscore-min.js"></script>
+>>>>>>> 6e4adbf90e136d96879b596fd5dbf8a4fce5e4f3
 <script src="jquery.js"></script>
 <script src="dropSelect.js"></script>
 <script>
 
     var obj1;
     var obj2;
+<<<<<<< HEAD
 
     var arr = [
         {
@@ -59,6 +64,21 @@
             phone1:13666712525,
         }
     ];
+=======
+    var arr = []
+    for(var i = 0; i < 1000; i++){
+        arr.push({
+            alias:'第一个别名点' + i,
+            address:'北京天安门XXX地点' + i,
+            id:i,
+            contact:'第一个联系人' +  i,
+            phone:13671889974 + i,
+            contact1:'第二个联系人' + i,
+            phone1:13666712525 + i,
+        })
+    }
+
+>>>>>>> 6e4adbf90e136d96879b596fd5dbf8a4fce5e4f3
 
     $('.create1').click(function(){
         obj1 = $.fn.dropSelectPlugin({

@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no"/>
+    <title>Document</title>
+</head>
+<body>
+<form id="form" action="./a.json">
+    <a onclick="a()">a</a>
+    <button id="submit" type="submit">submit</button>
+</form>
+<script src="http://test.oss.hyl.56zxr.com/hyl/js/jquery.min.js"></script>
+<script type="application/javascript">
+
+   function a(){
+       $("#submit").submit(function(){
+           debugger
+       })
+   }
+
+    /* 由于是get请求，直接把参数作为query string传递了 */
+//    var URL = 'https://apiservice.5173.com/api/home_getsymsitehomedata_sym?a=0.0793728037484367';
+//    function fetchDemo() {
+//        // fetch(url, option)支持两个参数，option中可以设置header、body、method信息
+//        fetch(URL).then(function(response) {
+//            // 通过promise 对象获得相应内容，并且将响应内容按照json格式转成对象，json()方法调用之后返回的依然是promise对象
+//            // 也可以把内容转化成arraybuffer、blob对象
+//            return response.json();
+//        }).then(function(json) {
+//            // 渲染页面
+//            console.log(json);
+//        });
+//    }
+//    fetchDemo();
+//
+//    if (navigator.serviceWorker) {
+//        navigator.serviceWorker.register('service-worker.js').then(function(registration) {
+//            console.log(registration)
+//            console.log('service worker 注册成功');
+//        }).catch(function (err) {
+//            console.log('servcie worker 注册失败')
+//        });
+//    }
+
+</script>
+</body>
+</html>

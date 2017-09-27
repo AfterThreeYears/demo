@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        img{
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            height: 300px;
+            width: 300px;
+            background:#fff;
+            /*display: none;*/
+        }
+
+
+    </style>
+</head>
+<body>
+<canvas id="canvas" height="600" width="600"></canvas>
+
+
+<script>
+    'use strict';
+    let canvas = document.querySelector('#canvas'),
+
+            context = canvas.getContext('2d');
+
+    context.font = '20px Helvetica';
+    //context.strokeStyle = 'blue';
+    //context.fillStyle = 'red';
+    context.lineWidth = 2;
+
+    context.strokeText('Stroke',10,50);
+    context.fillText('fill',150,50);
+
+    context.strokeText('Stroke && fill',300,50);
+    context.fillText('Stroke && fill',300,50);
+
+
+    context.lineWidth = 5;
+
+    context.beginPath();
+    context.rect(10,100,100,100);
+    context.stroke();
+
+    context.beginPath();
+    context.rect(150,100,100,100);
+    context.fill();
+
+    context.beginPath();
+    context.rect(300,100,100,100);
+    context.stroke();
+    context.fill();
+
+
+    context.beginPath();
+    context.arc(80,300,60,Math.PI*0.5,Math.PI*1.5);
+    context.stroke();
+
+    context.beginPath();
+    context.arc(200,300,60,0,Math.PI*1.5);
+    context.fill();
+
+    context.beginPath();
+    context.arc(350,300,60,0,Math.PI*1.5);
+    context.fill();
+    context.stroke();
+
+    context.beginPath();
+    context.stroke();
+
+    context.rect(50,400,100,100);
+    context.stroke();
+
+    //context.beginPath();
+
+    context.rect(50,510,100,100);
+    context.fill();
+
+</script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

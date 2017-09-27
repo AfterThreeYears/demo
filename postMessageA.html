@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>JS Bin</title>
+</head>
+<body>
+  <button id="open">Open Window</button>
+  <button id="push">Push Message</button>
+  <div id="message">
+    
+  </div>
+  <div id="iframeBox"></div>
+  <script>
+  var openWindow = document.getElementById('open');
+var pushMessage = document.getElementById('push');
+var messageBox = document.getElementById('message');
+
+var newWin;
+openWindow.addEventListener('click',function(){
+  newWin = window.open('http://127.0.0.1/es5/postMessageB.html');
+})
+
+pushMessage.addEventListener('click',function(){
+  newWin.postMessage('你好','*');
+  messageBox.innerHTML=  messageBox.innerHTML+'发送了你好，请移步新打开的页面查看收到的消息'
+})
+
+window.addEventListener('message',function(event){
+  messageBox.innerHTML=  messageBox.innerHTML+'<br>收到了回复:'+event.data
+})
+
+    
+</script>
+</body>
+</html>

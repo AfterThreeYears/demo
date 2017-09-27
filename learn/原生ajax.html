@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>1111</title>
+</head>
+<body>
+<script>
+
+</script>
+<script>
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET','https://api.vv726.top/ajax')
+    xhr.send();
+
+    xhr.onreadystatechange = function(){
+
+        if(xhr.readyState === 4 && xhr.status=== 200){
+            console.log(xhr.responseText)
+        }else{
+            console.log(xhr.statusText);
+        }
+    }
+    xhr.timeout = 10000;
+    xhr.ontimeout = function(event){
+        alert('请求超时！');
+    }
+    xhr.onprogress = updateProgress;
+    function updateProgress(event) {
+
+        if (event.lengthComputable) {
+            var percentComplete = event.loaded / event.total;
+        }
+    }
+
+</script>
+</body>
+</html>

@@ -10,12 +10,22 @@
         margin:0;
         padding:0;
     }
+<<<<<<< HEAD
     body{
 
     }
     div{
         height: 100px;
         width: 100px;
+=======
+    canvas{
+        height:300px;
+        width:600px;;
+    }
+    div{
+        height:100px;
+        width:100px;
+>>>>>>> 6e4adbf90e136d96879b596fd5dbf8a4fce5e4f3
     }
 
 
@@ -23,12 +33,17 @@
 <body>
 <h1></h1>
 <div></div>
+<<<<<<< HEAD
 <canvas id='canvas' height="600" width="400"></canvas>
+=======
+<canvas id='canvas' height="300" width="600"></canvas>
+>>>>>>> 6e4adbf90e136d96879b596fd5dbf8a4fce5e4f3
 
 <script>
 
     var canvas = document.querySelector('#canvas'),
             context = canvas.getContext('2d');
+<<<<<<< HEAD
 
     var img = document.createElement('img');
     var i = 0;
@@ -41,11 +56,24 @@
     img.onload = function(e){
 
         total = Math.floor(img.height/100);
+=======
+    var img = document.createElement('img');
+    var i = 0;
+    var total;
+    img.src = '../../demo/img/cat.jpg';
+    //img.src='https://www.vv726.top/demo/img/cat.jpg';
+    var height;
+    var width;
+    var radio;
+    img.onload = function(e) {
+        total = Math.floor(img.height/50);
+>>>>>>> 6e4adbf90e136d96879b596fd5dbf8a4fce5e4f3
 //        var radio = img.height/img.width;
 //        var height = canvas.width*radio;
 //        img.width = canvas.width;
 //        img.height = height;
 
+<<<<<<< HEAD
 //        if( img.width > img.height ){
 //            radio = img.height/img.width;
 //            height = canvas.height;
@@ -82,13 +110,61 @@
         var imageData = context.getImageData(e.clientX - offset.left, e.clientY - offset.top,1,1)
         var pixel = imageData.data;
         var pixelColor = 'rgba('+ pixel[0] +','+ pixel[1] +',' + pixel[2] +','+ pixel[3] +')'
+=======
+
+
+//        400 600
+//        1000 600
+//
+//        radio 0.6
+//        width 400
+//        height 240
+
+
+        if( img.width > img.height ){
+            radio = img.height/img.width;
+            width = canvas.width;
+            height = canvas.width * radio;
+        }else{
+            radio = img.width/img.height;
+            height = canvas.height;
+            width = canvas.width * radio;
+        }
+        //context.drawImage(img, 0, 0, 1024, 600, 0, 0, 500, 300);
+
+        run();
+       // context.drawImage(img,0,0,canvas.width,canvas.height);
+        //context.drawImage(img,0,0,img.width,img.height,0,0,canvas.width,canvas.height);
+    }
+    function run() {
+        setTimeout(function() {
+            //context.drawImage(img,sx,sy,swidth,sheight,x,y,width,height);
+            context.drawImage(img, 0, 0, img.width,50*i , 0, 0, canvas.width, 50*i);
+            i++;
+            //var data = context.getImageData(0, 450, 1, 1);
+            //console.log(data)
+            //console.log(i,total)
+            if( i < total ) {
+                run();
+            }
+        }, 300)
+    }
+    canvas.onmousemove = function(e) {
+        var offset = canvas.getBoundingClientRect();
+        var imageData = context.getImageData(e.clientX - offset.left, e.clientY - offset.top, 1, 1)
+        var pixel = imageData.data;
+        var pixelColor = 'rgba(' + pixel[0] + ',' + pixel[1] + ',' + pixel[2] + ',' + pixel[3] + ')'
+>>>>>>> 6e4adbf90e136d96879b596fd5dbf8a4fce5e4f3
         document.querySelector('h1').innerHTML = pixelColor;
         document.querySelector('div').style.backgroundColor = pixelColor;
     }
 
 
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> 6e4adbf90e136d96879b596fd5dbf8a4fce5e4f3
 </script>
 </body>
 </html>

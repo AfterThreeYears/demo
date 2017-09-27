@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no"/>
+    <title>Document</title>
+
+    <style>
+
+        #test{
+            display:none;
+        }
+        #textarea{
+            display:none;
+        }
+        span{
+            font-size:30px;
+            color:#abcdef;
+        }
+    </style>
+</head>
+<body>
+<button id="test">测试</button>
+<textarea name="" cols="30" rows="10" id="textarea"></textarea>
+<script src="https://cdn.staticfile.org/jquery/3.1.1/jquery.js"></script>
+<script>
+
+
+    var arr = [
+        '来点音乐？',
+        'press space (ˉ(∞)ˉ)',
+        '===========================',
+        '今天，是快乐的一天',
+        '等着下班呀',
+        '又可以一起玩啦',
+        '还可以一起吃饭',
+        '吃鸡牛猪羊',
+        '还有',
+        '你的臭臭螺蛳粉',
+        '============================',
+        'o(*≧▽≦)ツ', '等彩蛋？',
+        '没有咯哈哈哈(*˘︶˘*).｡.:*♡'
+    ];
+    var allArr = [];
+    function init(){
+        arr.forEach(function(item, index) {
+            allArr.push(item.split(''));
+        })
+        run()
+    }
+
+    function run() {
+        var curArr = allArr.shift();
+        if( curArr ) {
+            one(curArr);
+        } else {
+            setTimeout(function() {
+                $('body').append(arr)
+                console.log('结束')
+            }, 1000)
+        }
+    }
+    function one(curArr) {
+        if( curArr.length ) {
+            var key = curArr.shift();
+            setTimeout(function() {
+                $('body').append($('<span>' + key + '</span>'));
+                one(curArr)
+            }, 300)
+        } else {
+            setTimeout(function() {
+                clear();
+            }, 500)
+        }
+    }
+    function clear() {
+        var index = $('span').length;
+        if( index ) {
+            setTimeout(function() {
+                $($('span')[index - 1]).remove();
+                clear();
+            }, 100)
+        } else {
+            setTimeout(function() {
+                run();
+            }, 500)
+        }
+    }
+    if( location.search ) {
+        $('#test').show();
+        $('#textarea').show();
+        $('#test').click(function() {
+
+            arr = $('#textarea').val().split('\n');
+            init();
+        })
+
+    } else {
+        init();
+    }
+
+
+</script>
+</body>
+</html>

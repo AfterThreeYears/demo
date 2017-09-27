@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no"/>
+
+</head>
+<style>
+    *{
+        box-sizing:border-box;
+        margin:0;
+        padding:0;
+    }
+    html, body{
+        height:100%;
+        width:100%;
+    }
+    #canvas{
+
+    }
+
+
+</style>
+<body>
+
+<canvas id='canvas' width="500" height="280"></canvas>
+<button id="start">start</button>
+<button id="stop">stop</button>
+<script src="../../jquery.js"></script>
+<script>
+
+
+    var canvas = document.querySelector('#canvas'),
+            context = canvas.getContext('2d');
+    var Shape = function(x, y, width, height) {
+        this.y = y;
+        this.x = x;
+        this.width = width;
+        this.height = height;
+        this.radius = Math.random()*30;
+        this.angle = 0;
+        this.color = '#abcdef';
+    }
+    var shapes = [];
+    for( var i = 0; i < 100; i++ ) {
+
+        var x = Math.random()*canvas.width;
+        var y = Math.random()*canvas.height;
+        var width = height = Math.random()*10;
+        shapes.push(new Shape(x, y, width, height))
+    }
+    function animate() {
+        context.clearRect(0, 0, canvas.width, canvas.height);
+        var length = shapes.length;
+        for( var i = 0; i < length; i++ ) {
+            var tmpShape = shapes[i];
+            var x = tmpShape.x + (tmpShape.radius*Math.cos(tmpShape.angle*(Math.PI/180))  )
+            var y = tmpShape.y + (tmpShape.radius*Math.sin(tmpShape.angle*(Math.PI/180))  )
+            tmpShape.angle += 5;
+            //console.log(tmpShape.angle)
+            if( tmpShape.angle > 360 ) {
+                tmpShape.angle = 0;
+            }
+            context.fillStyle = tmpShape.color;
+            context.fillRect(x, y, tmpShape.width, tmpShape.height);
+
+        }
+        setTimeout(animate,33)
+    }
+    animate();
+
+
+</script>
+
+</body>
+</html>

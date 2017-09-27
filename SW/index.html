@@ -1,0 +1,30 @@
+<html>
+<head>
+    <script type="text/javascript" src="../../jquery.js"></script>
+
+</head>
+<body>
+<form name="input" action="" method="post">
+    First name:
+    <input type="text" name="FirstName" value="Mickey" size="20">
+    <br/>Last name:
+    <input type="text" name="LastName" value="Mouse" size="20">
+    <br/>
+    <input type="submit" value="Submit">
+    <script type="text/javascript">
+        $("form").submit(function(e) {
+            e.preventDefault();
+            $.ajax({
+                url:'./a.php',
+                success:function(){
+                    debugger
+                },
+                error:function(){
+                    debugger
+                }
+            })
+        });
+    </script>
+</form>
+</body>
+</html>

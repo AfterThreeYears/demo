@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        img{
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            height: 300px;
+            width: 300px;
+            background:#fff;
+            /*display: none;*/
+        }
+
+
+    </style>
+</head>
+<body>
+<canvas id="canvas" height="600" width="600"></canvas>
+
+
+<script>
+    'use strict';
+    let canvas = document.querySelector('#canvas'),
+
+            context = canvas.getContext('2d');
+
+    function drawGrid(){
+
+    }
+
+    function draw(){
+        context.clearRect(0,0,context.canvas.width,context.canvas.height);
+
+        drawGrid('lightgray',10,10);
+
+        context.save();
+
+        context.shadowColor='rgba(200,200,0,0.5)';
+
+        context.shadowOffsetX = 12;
+        context.shadowOffsetY = 12;
+        context.shadowBlur = 15;
+
+
+        drawCutouts();
+
+        strokeCutoutShapes();
+
+        context.restore();
+
+
+    }
+
+
+    function drawCutouts(){
+        context.beginPath();
+        addOuterRecanglePath();
+
+
+        addCirclePath();
+        addRectanglePath();
+        addTrianglePath();
+
+        context.fill();
+
+
+    }
+
+    function strokeCutoutShapes(){
+        context.save();
+
+        context.strokeStyle = 'rgba(0,0,0,0.7)';
+
+        context.beginPath();
+
+        addOuterRectanglePath();
+
+        context.stroke();
+
+        context.beginPath();
+
+        addCirclePath();
+        addTrianglePath();
+        context.stroke();
+
+    }
+
+
+    function rect(x,y,w,h,direction){
+        if( direction ){
+            context.moveTo(x,y);
+            context.lineTo(y,y+h);
+            context.lineTo(x+w,y+h);
+            context.lineTo(x+w,y);
+            context.closePath();
+        }else{
+            context.moveTo();
+            context.lineTo()
+        }
+    }
+
+
+
+
+
+
+
+</script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

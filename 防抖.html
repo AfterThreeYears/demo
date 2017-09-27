@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        body{
+            background:#444444;
+            color:white;
+            font:15px/1.51 system, -apple-system, ".SFNSText-Regular", "San Francisco", "Roboto", "Segoe UI", "Helvetica Neue", "Lucida Grande", sans-serif;
+            margin:0 auto;
+            max-width:800px;
+            padding:20px;
+        }
+        form{
+            display:inline-block;
+            padding:0;
+            margin:0;
+            padding:5px;
+            margin:5px 0 0 0;
+        }
+        input{
+            padding:8px 20px;
+            border-radius:2px;
+            border:0;
+            font-size:20px;
+        }
+        .status-key,
+        .status-ajax{
+            margin:10px 0;
+        }
+        .status-ajax{
+            color:#99FF7E;
+        }
+    </style>
+    <script src="https://cdn.staticfile.org/jquery/3.1.1/jquery.js"></script>
+    <script src="//cdn.bootcss.com/underscore.js/1.8.3/underscore-min.js"></script>
+</head>
+<body>
+<form>
+    <div class="status-key">我发现当你停止打字</div>
+    <input type="text" class="autocomplete">
+    <div class="status-ajax"></div>
+</form>
+<script>
+    $(document).ready(function() {
+        var $statusKey = $('.status-key');
+        var $statusAjax = $('.status-ajax');
+        var intervalId;
+
+        function make_ajax_request(e) {
+            var that = this;
+            $statusAjax.html('正在发送ajax');
+            intervalId = setTimeout(function() {
+                $statusKey.html('我发现当你停止打字');
+                $statusAjax.html('');
+                $(that).val('');
+            }, 2000);
+        }
+
+        $('.autocomplete')
+                .on('keydown', function() {
+                    $statusKey.html('等待更多输入');
+                    clearInterval(intervalId);
+                })
+        $('.autocomplete').on('keydown',
+                _.debounce(make_ajax_request, 1300));
+    });
+</script>
+</body>
+</html>

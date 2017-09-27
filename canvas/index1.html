@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        img{
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            height: 300px;
+            width: 300px;
+            background:#fff;
+            /*display: none;*/
+        }
+        canvas{
+            display: none;
+        }
+
+    </style>
+</head>
+<body>
+    <canvas id="canvas" height="300" width="300"></canvas>
+    <img class="img"/>
+
+    <button class="takePhone">拍照</button>
+
+<script>
+    'use strict';
+    let canvas = document.querySelector('#canvas'),
+            takePhone = document.querySelector('.takePhone'),
+            img = document.querySelector('.img'),
+            context = canvas.getContext('2d'),
+            FONT_HEIGHT = 10,
+            MARGIN = 35,
+            HAND_TRUNCATION = canvas.width/25,
+            HOUR_HEAD_TRUNCATION = canvas.width/10,
+            NUMERAL_SPACING = 20,
+            RADIUS = canvas.width/2 - MARGIN,
+            HEAD_RADIUS = RADIUS + NUMERAL_SPACING;
+    function drawCircle() {
+        context.beginPath();
+        context.arc(canvas.width/2, canvas.height/2, RADIUS, 0, Math.PI*2, true);
+        context.stroke();
+    }
+    function drawNumerals() {
+        var numerals = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+                angle = 0,
+                numeralWidth = 0;
+        numerals.forEach(function(numeral) {
+            angle = Math.PI/6*( numeral - 3 );
+            numeralWidth = context.measureText(numeral).width;
+            context.fillText(numeral,
+                    canvas.width/2 + Math.cos(angle)*(HEAD_RADIUS) - numeralWidth/2,
+                    canvas.height/2 + Math.sin(angle)*(HEAD_RADIUS) + FONT_HEIGHT/3
+            );
+        });
+    }
+    function drawCenter() {
+        context.beginPath();
+        context.arc(canvas.width/2, canvas.height/2, 5, 0, Math.PI*2, true);
+        context.fill();
+    }
+    function drawHand(loc, isHour) {
+        var angle = (Math.PI*2)*(loc/60) - Math.PI/2,
+                handRadius = isHour ? RADIUS - HAND_TRUNCATION - HOUR_HEAD_TRUNCATION
+                        : RADIUS - HAND_TRUNCATION;
+        context.moveTo(canvas.width/2, canvas.height/2);
+        context.lineTo(canvas.width/2 + Math.cos(angle)*handRadius,
+                canvas.height/2 + Math.sin(angle)*handRadius);
+        context.stroke();
+    }
+    function drawHands() {
+        var date = new Date,
+                hour = date.getHours();
+        hour = hour > 12 ? hour - 12 : hour;
+        drawHand(hour*5 + (date.getMinutes()/60*5, true, 0.5));
+        drawHand(date.getMinutes(), false, 0.5);
+        drawHand(date.getSeconds(), false, 0.5);
+    }
+    function drawClock() {
+        context.clearRect(0, 0, canvas.width, canvas.height);
+        drawCircle();
+        drawCenter();
+        drawHands();
+        drawNumerals();
+        updateClockImage();
+    }
+
+    function updateClockImage(){
+        img.src = canvas.toDataURL();
+    }
+
+    context.font = FONT_HEIGHT + 'px Arial';
+    var loop = setInterval(drawClock, 1000);
+    function windowToCanvas(canvas, x, y) {
+        var bbox = canvas.getBoundingClientRect();
+        return {
+            x:x - bbox.left*(canvas.width/bbox.width),
+            y:y - bbox.top*(canvas.height/bbox.height)
+        }
+    }
+    canvas.addEventListener('mousedown', function(e) {
+        var loc = windowToCanvas(canvas, e.clientX, e.clientY);
+        alert(JSON.stringify(loc));
+    }, false)
+
+    takePhone.onclick = function(e){
+        var dataUrl;
+
+        if( takePhone.innerHTML === '拍照' ){
+            takePhone.innerHTML = '返回';
+            img.style.display = 'block';
+            img.src = canvas.toDataURL();
+
+        }else{
+            takePhone.innerHTML = '拍照';
+            img.style.display = 'none';
+        }
+
+    }
+
+
+</script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

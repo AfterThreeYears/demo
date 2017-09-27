@@ -135,19 +135,45 @@ DropSelect.prototype._bindEvent = function() {
     })
 
 
+<<<<<<< HEAD
     $('.drop-input').on('input propertychange',function(e){
         _this.params._curVal = $(e.target).val();
+=======
+
+    function aaa(e){
+
+        _this.params._curVal = $(e.target).val();
+
+>>>>>>> 6e4adbf90e136d96879b596fd5dbf8a4fce5e4f3
         _this.params.searchWrap = $(e.target).parents(_this.params.el).find('.drop-searchWrap');
         _this._filter();
 
         _this._renderItem(_this.params.filterList);
+<<<<<<< HEAD
 
     })
+=======
+    }
+    var callback = _.debounce(aaa, 1000);
+    debugger
+
+    $('.drop-input').on('input propertychange', function(e){
+        callback(e)
+    });
+
+
+
+
+>>>>>>> 6e4adbf90e136d96879b596fd5dbf8a4fce5e4f3
 }
 DropSelect.prototype._filter = function() {
     this.params.filterList = [];
 
     for(var i = 0 ; i < this.params.arr.length ;i ++){
+<<<<<<< HEAD
+=======
+        console.log(i)
+>>>>>>> 6e4adbf90e136d96879b596fd5dbf8a4fce5e4f3
         if( this.params.arr[i].address.indexOf(this.params._curVal) > -1 ){
             this.params.filterList.push(this.params.arr[i])
         }

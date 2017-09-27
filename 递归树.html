@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script src="../jquery.js"></script>
+<script>
+    var arr = [
+        {
+            name:'第一级',
+            child:[
+                {
+                    name:'第一级2',
+                    child:[
+                        {
+                            name:'第一级3',
+                            child:[
+
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            name:'第二级',
+            child:[
+                {
+                    name:'第二级2',
+                    child:[
+                        {
+                            name:'第二级3',
+                            child:[
+
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+  var ul = $('<ul></ul>')
+    showAll(arr,ul)
+    function showAll(json,parent){
+        for(var key in json){
+            if(json[key].child.length>0){
+                var li = $('<li></li>')
+                li.append(json[key].name).append('<ul></ul>').appendTo(parent)
+                showAll(json[key].child,$(li).children().eq(0))
+            }else{
+                $('<li></li>').append(json[key].name).appendTo(parent)
+            }
+        }
+    }
+
+    $('body').append(ul)
+</script>
+</body>
+</html>

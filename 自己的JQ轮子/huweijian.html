@@ -1,0 +1,598 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        *{
+            padding:0;
+            margin:0;
+        }
+        #box{
+            width:20px;
+        }
+        .bfc{
+            width:500px;
+            height:500px;
+            background:red;
+        }
+        .child{
+            margin:50px;
+            width:400px;
+            height:400px;
+            background:blue;
+        }
+        .h1{
+            position:absolute;
+            top:0;
+            left:0;
+            transition:all 10s ease;
+        }
+        .run{
+            left:1000px;
+        }
+
+        .contains{
+            height: 150px;
+            margin-top: 10px;
+            width: 150px;
+            background: #D48FAD;
+        }
+        .cur{
+            background:#008c00 !important;
+        }
+        .ul .li{
+            float: left;
+            height: 50px;
+            padding: 10px;
+            color: #fff;
+            background: #ccc;
+            transition: all .2s ease;
+        }
+        .ul{
+            overflow: hidden;
+        }
+
+    </style>
+</head>
+<body>
+
+<ul class="ul">
+    <li data-index="1" class="li">111</li>
+    <li data-index="2" class="li">222</li>
+    <li data-index="3" class="li">33</li>
+</ul>
+
+<div class="contains"></div>
+
+<script>
+
+    var arr = ['第一条','第2条','第3条'];
+    document.querySelector('.ul').addEventListener('mouseover',function(e){
+
+        //console.log(e.target);
+        //console.log('---------');
+        //console.log(e.currentTarget);
+        //console.log(e);
+        if( e.target.nodeName === 'LI' ){
+            for( var i = 0; i < document.querySelector('.ul').querySelectorAll('.li').length; i++){
+                document.querySelector('.ul').querySelectorAll('.li')[i].classList.remove('cur');
+            }
+            e.target.classList.add('cur');
+            document.querySelector('.contains').innerHTML = arr[e.target.getAttribute('data-index') - 1]
+        }
+    },false);
+
+</script>
+<div class="bfc">
+    <div class="child"></div>
+</div>
+<div id="box">
+    <p id="pp">
+
+    <p id="p"></p>
+    </p>
+    <div class="div" id="div"></div>
+    <div class="b"></div>
+    <div class="a div">
+        <div class="bdiv div adiv" id="div">
+            <div class="bbb div"></div>
+        </div>
+    </div>
+</div>
+11
+
+
+<div class="box"></div>
+<div class="box"></div>
+<div class="remove">
+    <a href="">111</a>
+
+    <p>
+        <a href="">3333</a>
+    </p>
+
+    <div class="re"></div>
+</div>
+<script>
+    ;(function(window, document) {
+        var w = window,
+                document = document;
+        var HuWeiJian = function(selector) {
+            return new HuWeiJian.prototype.init(selector);
+        };
+        HuWeiJian.prototype = {
+            constructor:this,
+            length:0,
+            splice:[],
+            selector:'',
+            klassReg:function(klass) {
+                return new RegExp('(\\s|^)' + klass + '(\\s|$)');
+            },
+            init:function(selector) {
+                if( !selector ) {
+                    return this;
+                }
+                if( typeof selector === 'object' ) {
+                    var i;
+                    var selectorArr = [selector];
+                    for( i = 0; i < selectorArr.length; i++ ) {
+                        this[i] = selectorArr[i];
+                    }
+                    this.length = selectorArr.length;
+                    return this;
+                } else if( typeof selector === 'function' ) {
+                    //初始化dom
+                    this.ready(selector);
+                    return;
+                } else {
+                    var selector = selector.trim(),
+                            elm;
+                    if( selector.charAt(0) === '#' && !selector.match('\\s') ) {
+                        this.selector = selector;
+                        selector = selector.substring(1);
+                        elm = document.getElementById(selector);
+                        this[0] = elm;
+                        this.length = 1;
+                        return this;
+                    } else {
+                        elm = document.querySelectorAll(selector);
+                        for( var i, i = 0; i < elm.length; i++ ) {
+                            this[i] = elm[i];
+                        }
+                        this.length = elm.length;
+                        this.selector = selector;
+                        return this;
+                    }
+                }
+            },
+            ready:function(fn) {
+                document.addEventListener('DOMContentLoaded', function() {
+                    fn && fn()
+                }, false);
+                document.removeEventListener('DOMContentLoaded', fn, true);
+            },
+            css:function(attr, val) {
+                for( var i, i = 0; i < this.length; i++ ) {
+                    if( typeof attr === 'string' ) {
+                        if( arguments.length === 1 ) {
+                            //获取样式
+                            return getComputedStyle(this[i], null)[attr];
+                        }
+                        this[i].style[attr] = val;
+                    } else if( typeof attr === 'object' ) {
+                        for( var key in attr ) {
+                            this[i].style.cssText += key + ':' + attr[key] + ';';
+                        }
+                    }
+                }
+                return this;
+            },
+            hasClass:function(klass) {
+                var arr = [];
+                for( var i, i = 0; i < this.length; i++ ) {
+                    if( this[i].className.match(this.klassReg(klass)) ) {
+                        arr.push(true)
+                    } else {
+                        arr.push(false)
+                    }
+                }
+                if( arr.indexOf(true) !== -1 ) {
+                    return true;
+                } else {
+                    return false;
+                }
+            },
+            addClass:function(klass) {
+                for( var i, i = 0; i < this.length; i++ ) {
+                    if( !this[i].className.match(this.klassReg(klass)) ) {
+                        this[i].classList.add(klass)
+                    }
+                }
+                return this;
+            },
+            removeClass:function(klass) {
+                for( var i, i = 0; i < this.length; i++ ) {
+                    if( this[i].className.match(this.klassReg(klass)) ) {
+                        this[i].classList.remove(klass)
+                    }
+                }
+                return this;
+            },
+            next:function() {
+                return sibling(this[0], 'nextSibling');
+            },
+            prev:function() {
+                return sibling(this[0], 'previousSibling')
+            },
+            parent:function() {
+                var parent = this[0].parentNode;
+                parent && parent.nodeType !== 11 ? parent : null;
+                var el = HuWeiJian();
+                el[0] = parent,
+                        el.selector = parent.tagName.toLocaleLowerCase(),
+                        el.length = 1;
+                return el;
+            },
+            parents:function() {
+                var els = HuWeiJian(),
+                        i = 0;
+                while( ( this[0] = this[0].parentNode ) && this[0].parentNode !== 9 ) {
+                    if( this[0].nodeType === 1 ) {
+                        els[i] = this[0];
+                        i++;
+                    }
+                }
+                els.length = i;
+                return els
+            },
+            child:function(el) {
+                var els = HuWeiJian(),
+                        i = 0,
+                        j = 0,
+                        klass = null;
+                var child = this[0].childNodes;
+                for( i; i < child.length; i++ ) {
+                    if( parseInt(el.indexOf('.'), 10) + 1 ) {
+                        //class
+                        klass = el.split('.')[1];
+                        if( child[i].nodeType === 1 && parseInt(child[i].className.indexOf(klass), 10) + 1 ) {
+                            j++;
+                            els[j] = child[i];
+                        }
+                    } else if( parseInt(el.indexOf('#'), 10) + 1 ) {
+                        //id
+                        klass = el.split('#')[1];
+                        if( child[i].nodeType === 1 && child[i].id === klass ) {
+                            j++;
+                            els[j] = child[i];
+                        }
+                    } else {
+                        //element
+                        if( child[i].nodeType === 1 && child[i].tagName.toLocaleLowerCase() === el ) {
+                            j++;
+                            els[j] = child[i];
+                        }
+                    }
+                }
+                els.length = j;
+                return els;
+            },
+            find:function(el) {
+                if( !el ) return;
+                var context = this.selector;
+                return new HuWeiJian(context + ' ' + el);
+            },
+            first:function() {
+                return new HuWeiJian(this[0]);
+            },
+            eq:function(num) {
+                num = num >= 0 ? num : this.length - 1;
+                return new HuWeiJian(this[num]);
+            },
+            get:function(num) {
+                num = num => 0 ? num : this.length - 1;
+                return this[num];
+            },
+            each:function(fn) {
+                for( var i = 0, length = this.length; i < length; i++ ) {
+                    var _this = new HuWeiJian(this[i]);
+                    fn.call(_this, i, _this);
+                }
+            },
+            remove:function() {
+                for (var i = 0; i < this.length; i++) {
+                    this[i].parentNode.removeChild(this[i]);
+                }
+                return this;
+            },
+            empty:function() {
+                while( this[0].querySelectorAll('*')[0] ) {
+                    this[0].removeChild(this[0].querySelectorAll('*')[0]);
+                }
+                return this;
+            },
+            attr:function() {
+                for( var i = 0, length = this.length; i < length; i++ ) {
+                    if( arguments.length === 1 ) {
+                        var args = arguments[0];
+                        if( typeof args === 'string' ) {
+                            return this[i].getAttribute(args);
+                        } else if( typeof args === 'object' ) {
+                            for( var key in args ) {
+                                this[i].setAttribute(key, args[key]);
+                            }
+                        }
+                    } else if( arguments.length === 2 ) {
+                        this[i].setAttribute(arguments[0], arguments[1]);
+                    }
+                }
+            },
+            html:function(val) {
+                if( !val ) {
+                    return this[0].innerHTML;
+                } else {
+                    for( var i = 0, length = this.length; this < length; i++ ) {
+                        this[i].innerHTML = val;
+                    }
+                }
+                return this;
+            },
+            append:function(el){
+                for( var i = 0, length = this.length; i< length; i++ ){
+                    this[i].insertAdjacentHTML('beforeend',el)
+                }
+                return this;
+            },
+            before:function(el){
+                for( var i = 0, length = this.length; i< length; i++ ){
+                    this[i].insertAdjacentHTML('beforeBegin',el)
+                }
+                return this;
+            },
+            after: function (el) {
+                for( var i = 0, length = this.length; i< length; i++ ){
+                    this[i].insertAdjacentHTML('afterEnd',el)
+                }
+                return this;
+            },
+            on:function(type,selector,fn){
+                if( typeof selector === 'function' ){
+                    fn = selector;
+                    for( var i = 0,length = this.length; i<length; i++ ){
+                        if( !this[i].guid ){
+                            this[i].guid = ++HuWeiJian.guid;
+
+                            HuWeiJian.Events[HuWeiJian.guid] = {};
+
+                            HuWeiJian.Events[HuWeiJian.guid][type] = [fn];
+
+                            bind(this[i],type,this[i].guid);
+
+                        }else{
+                            var id = this[i].guid;
+                            if( HuWeiJian.Events[id][type] ){
+                                HuWeiJian.Events[id][type].push(fn);
+                            }else{
+                                HuWeiJian.Events[id][type] = [fn];
+                                bind(this[i],type,id);
+                            }
+                        }
+                    }
+                }
+            }
+        };
+        //全局事件
+        HuWeiJian.Events = [];
+        HuWeiJian.guid = 0;
+        function bind(dom,type,guid){
+            dom.addEventListener(type,function(e){
+                for( var i =0 ; i < HuWeiJian.Events[guid][type].length; i++ ){
+                    HuWeiJian.Events[guid][type][i].call(dom, e);
+                }
+            },false)
+        }
+
+        HuWeiJian.prototype.init.prototype = HuWeiJian.prototype;
+        ///ajax
+        HuWeiJian.get = function(options) { //url,sucBack,complete
+            option = {
+                url:options.url,
+                type:'GET',
+                sucBack:options.sucBack,
+                complete:options.complete
+            };
+            ajax(option);
+        };
+        HuWeiJian.post = function(options) { //url,data,sucBack,complete
+            option = {
+                url:options.url,
+                type:'POST',
+                data:options.data,
+                sucBack:options.sucBack,
+                complete:options.complete
+            };
+            ajax(option)
+        };
+
+        HuWeiJian.jsonp = function(options) { //url,data,sucBack,complete
+            var script = document.createElement('script'),
+                    head = document.querySelector('head'),
+                    data = options.data,
+                    dataStr = '',
+                    jsonpName = options.jsoncallback || generateRandomName(),
+                    cache = false;
+
+            function generateRandomName() {
+                var uuid = '';
+                var s = [];
+                var i = 0;
+                var hexDigits = '0123456789ABCDEF';
+                for( i = 0; i < 32; i++ ) {
+                    s[i] = hexDigits.substr(Math.floor(Math.random()*0x10), 1)
+                }
+                s[12] = '4';
+                s[16] = hexDigits.substr((s[16] & 0x3) | 0x8, 1);
+                uuid = 'jsonp_' + s.join('');
+                return uuid
+            }
+
+            //设置srcipt的id
+
+            script.id = 'id_' + jsonpName;
+            function serialize(obj) {
+                var arr = [], key, val;
+                for( key in obj ) {
+                    if( Array.isArray(obj[key]) ) {
+                        obj[key].forEach(function(item, i) {
+                            for( var keys in item ) {
+                                arr.push(keys + '=' + item[keys]);
+                            }
+                        })
+                    } else {
+                        arr.push(key + '=' + obj[key]);
+                    }
+                }
+                return arr.join('&');
+            }
+
+
+
+            //是否缓存
+            if( options.cache ){
+                timer = new Date * 1;
+            }else{
+                timer = '';
+            }
+
+            if( data ) {
+                dataStr = serialize(data) + '&';
+            }
+            // 注册全局函数
+
+
+
+            window[jsonpName] = function(json) {
+                debugger
+                // 执行传入的的函数
+                options.callback(json);
+
+                // 执行这个函数后，要销毁这个函数
+                window[jsonpName] = null;
+                // 获取这个script的元素
+                var elem = document.getElementById("id_" + jsonpName);
+                // 删除head里面插入的script，这三步都是为了不影响污染整个DOM啊
+
+                head.removeChild(elem);
+            };
+            script.src = options.url + '?' + dataStr + 'jsoncallback=' + jsonpName + '&timer=' + timer;  //options.url + '' + dataStr + 'jsoncallback=jsonp1';
+            head.appendChild(script);
+
+        };
+        function ajax(options) {
+            var xhr = new XMLHttpRequest();
+            var url = options.url;
+            xhr.open(options.type, url);
+            xhr.onreadystatechange = onStateChange;
+            if( options.type === 'POST' ) {
+                xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            }
+            xhr.send(options.data ? options.data : null);
+            function onStateChange() {
+                if( xhr.readyState == 4 ) {
+                    var result,
+                            status = xhr.status;
+                    if( (status >= 200 && status < 300) || status == 304 ) {
+                        result = xhr.responseText;
+                        if( !w.JSON ) {
+                            result = JSON.parse(result);
+                        } else {
+                            result = eval('(' + result + ')');
+                        }
+                        options.sucBack && options.sucBack(result, xhr)
+                    } else {
+                        console.log("ERR", xhr.status);
+                    }
+                }
+            }
+        };
+        function sibling(cur, dir) {
+            //把下一个节点赋值个当前节点，如果是文本节点，那么就再找下一个。直到找到DOM节点
+            while( ( cur = cur[dir] ) && cur.nodeType !== 1 ) {
+            }
+            return cur;
+        };
+        w.$$ = HuWeiJian;
+
+    })(window, document);
+</script>
+<script>
+    //console.log($());
+    //$$('#box').next()
+    $$('#box').css({
+        'width':'100px',
+        'height':'100px',
+        'background':'red'
+    }).addClass('new').removeClass('box').attr({'name':'1111', 'age':'222'})
+    $$('.box').hasClass('newClass');
+    //console.log($$('#box').find('.div'));
+    //console.log($$('#box').child('.div'));
+    //console.log( $('#box').find('div') )
+    $$('div').each(function(index, item) {
+        //console.log(this)
+    });
+
+    $$('.box').append( '<div class="aaa"></div>').after('<div class="bbb"></div>').before('<div class="ccc"></div>')
+
+    //console.log( $$('#pp').get(0) )
+    //console.log($$(document.querySelectorAll('div')))
+    $$.get({
+        url:'http://www.uhouzz.com/index.php/wechatapp/Ads/adList?src=8&rid=1000&position=1',
+        sucBack:function(data, xhr) {
+            //console.log(data, xhr)
+        }
+    });
+    $$.jsonp({
+        url:'http://news.m.5173.com/news/ad',
+        data:{
+            version:2,
+            devicetype:'iphone',
+        },
+        /*
+                data:{
+                    a:[{
+                        name:1
+                    }, {
+                        show:2
+                    }],
+                    b:22222
+                },
+        */
+        callback:function(data) {
+            console.log(data)
+        },
+        jsoncallback:'xiaownag',
+        cache:true
+
+    });
+    $$('.remove').remove();
+    //$('.remove').empty();
+
+
+    $$('.ul .li').on('click',function(e){
+        console.log(this.innerHTML)
+    })
+
+    $$('.ul .li').eq(0).on('click',function(e){
+        console.log(this)
+    })
+
+    $$('.ul .li').eq(0).on('mosueover',function(e){
+        console.log(this)
+    })
+
+    console.log( $$('.ul .li').eq(0) )
+
+</script>
+</body>
+</html>

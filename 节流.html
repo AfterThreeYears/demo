@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>节流</title>
+    <style>
+        body{
+            background:#444444;
+            color:white;
+            font:15px/1.51 system, -apple-system, ".SFNSText-Regular", "San Francisco", "Roboto", "Segoe UI", "Helvetica Neue", "Lucida Grande", sans-serif;
+            margin:0 auto;
+            max-width:600px;
+            padding:20px;
+        }
+        .item{
+            border:4px solid white;
+            height:120px;
+            width:100%;
+            margin-bottom:50px;
+            background:#333333;
+            padding:20px;
+        }
+        .color-1{
+            border-color:#9BFFBB
+        }
+        .color-2{
+            border-color:#B9C6FF
+        }
+        .color-3{
+            border-color:#FFA3D8
+        }
+        .color-4{
+            border-color:#FF8E9B
+        }
+    </style>
+</head>
+<body>
+<h1>Infinite scrolling throttled</h1>
+<div class="item color-1">Block 1</div>
+<div class="item color-2">Block 2</div>
+<div class="item color-3">Block 3</div>
+<div class="item color-4">Block 4</div>
+<script src="https://cdn.staticfile.org/jquery/3.1.1/jquery.js"></script>
+<script src="//cdn.bootcss.com/underscore.js/1.8.3/underscore-min.js"></script>
+<script>
+
+    $(document).ready(function() {
+        $(document).on('scroll', _.throttle(function() {
+            console.log('run')
+            check_if_needs_more_content();
+        }, 300));
+        function check_if_needs_more_content() {
+            pixelsFromWindowBottomToBottom = 0 + $(document).height() - $(window).scrollTop() - $(window).height();
+            if( pixelsFromWindowBottomToBottom < 200 ) {
+                $('body').append($('.item').clone());
+            }
+        }
+    });
+</script>
+</body>
+</html>

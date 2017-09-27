@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+<script>
+    /*******不用function的深拷贝*******/
+
+        function clone(obj) {
+            return JSON.parse(JSON.stringify(obj))
+            //先用stringify转换成字符串
+            //接着用parse转换成对象
+        }
+
+        var a = {'name':'维维'};
+        var b = clone(a);
+        b.name = '小翟';
+        console.log(a.name); //维维
+        console.log(b.name); //小翟
+
+    /*******可以用function的深拷贝*******/
+
+        function getType(o) {
+            var type = _t = typeof(o);
+            if( type == "object" ){
+                return ( o == null && "null" || Object.prototype.toString.call(o).slice(8, -1) ).toLowerCase()
+            }else{
+                return _t.toLowerCase();
+            }
+        }
+
+        function extend(destination, source) {
+            for( var i in source ) {
+                if( getType(source[i]) == "array" || getType(source[i]) == "object" ) {
+                    destination[i] = getType(source[i]) == "array" ? [] : {};
+                    extend(destination[i], source[i]);
+                } else {
+                    destination[i] = source[i];
+                }
+            }
+        }
+
+        var test = {aa:'str',a:null, b:[1, 2, 3], c:{d:"css", e:"cdd"},d:function(){console.log(123)}};
+        var test1 = {};
+        /*test1.d = "change";
+        console.log(test.d);
+        console.log(test1.d);*/
+
+        extend( test1 ,test );
+
+        test.a = '我已经不是null了';
+        test1.a = '我也不是null了';
+
+        console.log(test,test1);
+
+
+
+        /***********性能比较**********/
+        var start = ( new Date() ).getTime();
+
+        for(var i = 0 ; i < 10000 ; i++){
+            extend(test1,test);
+        }
+
+        var end = (new Date()).getTime();
+
+        console.log('递归复制的时间是',(end - start) + 'ms')
+
+        var start = (new Date()).getTime();
+
+        for(var i = 0 ; i < 10000 ; i++){
+            clone(test1,test);
+        }
+
+        var end = (new Date()).getTime();
+
+        console.log('JSON复制的时间是',(end - start) + 'ms')
+
+
+
+
+
+</script>
+</body>
+</html>

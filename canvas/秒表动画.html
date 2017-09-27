@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<style>
+	*{
+		box-sizing:border-box;
+		margin:0;
+		padding:0;
+	}
+	body{
+		background:#dddddd;
+	}
+	#canvas{
+		position:absolute;
+		top:30px;
+		left:10px;
+		background:#ffffff;
+		margin-left:10px;
+		margin-top:10px;
+		box-shadow:4px 4px 8px rgba(0, 0, 0, 0.5);
+	}
+	input{
+		margin-left:15px;
+	}
+</style>
+<body>
+
+<input type="button" id="startStopButton" value="Start"/>
+<input type="text" id="secondsInput">
+
+<canvas id='canvas' ></canvas>
+
+<script>
+
+	var canvas = document.querySelector('#canvas'),
+			context = canvas.getContext('2d');
+
+	function StopWatch(){}
+
+	StopWatch.prototype = {
+		startTime:0,
+		running:false,
+		elapsed:undefined,
+		start:function(){
+			this.startTime = +new Date;
+			this.elapsedTime = undefined;
+			this.running = true;
+		},
+		stop:function(){
+			this.elapsed = (+new Date()) - this.startTime;
+			this.running = false;
+		},
+		getElapsedTime:function(){
+			if(this.running){
+				return (+new Date) - this.startTime;
+			}else{
+				return this.elapsed;
+			}
+		},
+		isRunning:function(){
+			return this.running;
+		},
+		reset:function(){
+			this.elapsed = 0;
+		}
+	};
+
+
+	var stopwatch = new StopWatch(),
+			secondsInput = document.getElementById('secondsInput'),
+			startStopButton = document.getElementById('startStopButton');
+
+	startStopButton.onclick = function(){
+		var value = startStopButton.value;
+		if( value === 'Start' ){
+			stopwatch.start();
+			startStopButton.value = 'Stop';
+			requestAnimationFrame(animate);
+			secondsInput.disabled = true;
+		}else{
+			stopwatch.stop();
+			timerSetting = parseFloat(secondsInput.value);
+			startStopButton.value = 'Start';
+			secondsInput.disabled = false;
+		}
+		stopwatch.reset();
+	}
+	function animate(){
+		if( stopwatch.isRunning() && stopwatch.getElapsedTime() > timerSetting*1000 ){
+			stopwatch.stop();
+			startStopButton.value = 'Start';
+			secondsInput.disabled = false;
+			secondsInput.value = 0;
+		}else if( stopwatch.isRunning() ) {
+			redraw();
+			requestAnimationFrame(animate)
+		}
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</script>
+</body>
+</html>
